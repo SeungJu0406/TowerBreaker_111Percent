@@ -19,6 +19,8 @@ namespace NSJ_Player
 
         public bool IsCollide => _isCollide;
         private bool _isCollide = false;
+        // 전환 중 왼쪽 Boundary를 통과할 때 피격 판정이 발생하는 버그 방지용
+        private bool _isTransitioning = false;
 
         // FloorManager가 yield return으로 대기하며 순서를 제어하므로
         // Player는 이벤트를 직접 구독하지 않음 — 이동 코루틴만 public으로 제공
@@ -42,6 +44,9 @@ namespace NSJ_Player
         // 플로어 하강이 완료된 뒤 호출 → 새 층에 플레이어가 나타나는 연출
         public IEnumerator MoveFromLeftCoroutine()
         {
+            // 이동 중 왼쪽 Boundary 트리거를 통과하므로 피격 판정 무시
+            _isTransitioning = true;
+
             Vector3 target = _initialPosition.position;
             // InitialPosition 기준 왼쪽으로 _offScreenDistance 만큼 떨어진 곳에서 시작
             Vector3 start = new Vector3(target.x - _offScreenDistance, target.y, target.z);
@@ -55,6 +60,8 @@ namespace NSJ_Player
                 yield return null;
             }
             transform.position = target;
+
+            _isTransitioning = false;
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
@@ -75,6 +82,8 @@ namespace NSJ_Player
         {
             if (collision.gameObject.CompareTag(Tag.Boundary))
             {
+                // 전환 중 왼쪽에서 등장할 때 Boundary를 통과하므로 판정 무시
+                if (_isTransitioning) return;
                 _isCollide = true;
             }
 
