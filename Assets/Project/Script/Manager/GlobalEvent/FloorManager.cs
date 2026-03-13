@@ -28,6 +28,8 @@ public class FloorManager : MonoBehaviour
     void Awake()
     {
         Manager.SetFloor(this);
+
+       _player = GameObject.FindWithTag("Player").GetComponent<Player>();
     }
 
     void Start()
