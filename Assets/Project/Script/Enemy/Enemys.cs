@@ -105,7 +105,7 @@ namespace NSJ_Enemy
         }
 
         // 몹 뒤로 밀림 현상
-        private void KnockBack(float knockBackForce)
+        public void KnockBack(float knockBackForce)
         {
             StartCoroutine(MoveBackCoroutine(knockBackForce, 0.5f));
         }

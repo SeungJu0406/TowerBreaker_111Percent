@@ -26,6 +26,11 @@ namespace NSJ_Player
             GlobalEventManager.GlobalEvent?.OnPlayerHitInvoke();
 
             // 처음 위치로 이동
+            MoveBack();
+        }
+
+        public void MoveBack()
+        {
             StartCoroutine(MoveBackCoroutine());
         }
 
