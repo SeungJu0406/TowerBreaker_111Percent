@@ -43,12 +43,11 @@ namespace NSJ_Player
         // (카메라 밖에서 갑자기 등장 = 시작 위치에서 뿅 나오는 느낌)
         private void OnTransitionEnd() => transform.position = _initialPosition.position;
 
-        // 층 전환 연출 중 플레이어를 카메라 위쪽 밖으로 이동
-        // Lerp로 부드럽게 올라가게 해서 '올라가는 느낌'을 줌
+        // 층 전환 연출 중 플레이어를 카메라 오른쪽 밖으로 이동
         private IEnumerator MoveOffScreenCoroutine()
         {
             Vector3 start = transform.position;
-            Vector3 target = start + Vector3.up * _offScreenDistance;
+            Vector3 target = start + Vector3.right * _offScreenDistance;
             float elapsed = 0f;
             while (elapsed < _transitionMoveDuration)
             {

@@ -8,7 +8,8 @@ public class Floor : MonoBehaviour
 {
     // 이 층에 속한 Enemys 그룹 리스트 (프리팹에 미리 배치된 오브젝트들)
     [SerializeField] private List<Enemys> enemysGroup;
-
+    [SerializeField] private Enemys _enemysPrefab;
+    [SerializeField] private Transform _InitialEnemyPos;
     // FloorManager가 구독 → 이 층의 모든 그룹이 클리어되면 전환 코루틴 시작
     public event UnityAction OnFloorCleared;
 
@@ -50,12 +51,16 @@ public class Floor : MonoBehaviour
         foreach (var enemyGroup in floorData.EnemysGroup)
         {
             List<Enemy> enemies = enemyGroup.Enemies;
+            Enemys newEnemys = Instantiate(_enemysPrefab, transform);
+            enemysGroup.Add(newEnemys);
+            // 위치 설정
+            newEnemys.transform.position = _InitialEnemyPos.position;
             for (int i = 0; i < enemies.Count; i++)
             {
                 // 적 생성 로직
-                Enemy newEnemy = Instantiate(enemies[i]);
+                Enemy newEnemy = Instantiate(enemies[i], newEnemys.transform);
                 // 생성된 적을 enemysGroup 리스트에 추가
-                enemysGroup[enemyGroupCount].AddEnemy(newEnemy);
+                newEnemys.AddEnemy(newEnemy);
             }
             enemyGroupCount++;
         }

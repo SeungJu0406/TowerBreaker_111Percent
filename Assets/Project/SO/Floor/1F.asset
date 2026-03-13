@@ -12,5 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4850ac011ef68d4fbe62fa213ab16e3, type: 3}
   m_Name: 1F
   m_EditorClassIdentifier: 
-  EnemysGroup: []
+  FloorNumber: 0
+  EnemysGroup:
+  - GroupName: Normal
+    Enemies:
+    - {fileID: 5932213895478614782, guid: ae0d764c6deb4ec4d9a4f300b1c630dc, type: 3}
+    - {fileID: 5932213895478614782, guid: ae0d764c6deb4ec4d9a4f300b1c630dc, type: 3}
+    - {fileID: 5932213895478614782, guid: ae0d764c6deb4ec4d9a4f300b1c630dc, type: 3}
+    - {fileID: 5932213895478614782, guid: ae0d764c6deb4ec4d9a4f300b1c630dc, type: 3}
+    - {fileID: 5932213895478614782, guid: ae0d764c6deb4ec4d9a4f300b1c630dc, type: 3}
   FloorMultiplier: 1

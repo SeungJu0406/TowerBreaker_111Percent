@@ -8,12 +8,13 @@ public class FloorManager : MonoBehaviour
     [SerializeField] private Floor _floorPrefab;
 
     [Header("Transition")]
+    [SerializeField] private Vector3 _initPos = new Vector3(0, 0, 0);
     // 플로어 간 수직 간격 (Y축 기준, 위로 쌓임)
     [SerializeField] private float _floorHeight = 10f;
     // 층 이동 연출에 걸리는 시간(초)
     [SerializeField] private float _transitionDuration = 1f;
 
-    private Floor _currentFloor;
+   [SerializeField] private Floor _currentFloor;
     private int _currentFloorIndex;
 
     // Key = 플로어 인덱스, Value = 실제 Floor 오브젝트
@@ -51,7 +52,7 @@ public class FloorManager : MonoBehaviour
     // 위치: index * _floorHeight → 현재 층 위로 한 칸씩 올라가는 구조
     private void SpawnFloor(int index)
     {
-        Floor floor = Instantiate(_floorPrefab, new Vector3(0, index * _floorHeight, 0), Quaternion.identity);
+        Floor floor = Instantiate(_floorPrefab, new Vector3(_initPos.x, _initPos.y + index * _floorHeight, _initPos.z), Quaternion.identity);
         floor.CreateEnemy(GetFloorData(index));
         _activeFloors[index] = floor;
     }
