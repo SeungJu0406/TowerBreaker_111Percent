@@ -1,5 +1,4 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -50,6 +49,9 @@ namespace NSJ_Enemy
             // 죽는 로직
 
             // 죽는 이펙트
+
+            _canHit = false;
+            _neighborInfo.NextNeighbor?.SetCanHit(true);
 
             OnDie?.Invoke();
 

@@ -23,7 +23,6 @@ namespace NSJ_Enemy
         {
             ControlEnemyInterval();
             InitEnemys();
-            SubscribesEnemysEvent();
         }
 
         private void Update()
@@ -88,20 +87,6 @@ namespace NSJ_Enemy
             }
         }
 
-        private void SubscribesEnemysEvent()
-        {
-            for (int i = 0; i < _enemies.Count; i++)
-            {
-                Enemy enemy = _enemies[i];
-                enemy.OnDie += () =>
-                {
-                    enemy.SetCanHit(false);
-                    enemy.NextNeighbor?.SetCanHit(true);
-                };
-            }
-        }
-
-        
 
         //private void TestTakeDamage()
         //{
