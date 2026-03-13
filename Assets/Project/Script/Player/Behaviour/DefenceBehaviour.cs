@@ -64,7 +64,7 @@ namespace NSJ_Player
         private IEnumerator MoveBackCoroutine()
         {
             _canDefend = false;
-            GlobalEventManager.GlobalEvent?.OnDefenceStartInvoke();
+            Manager.Event?.OnDefenceStartInvoke();
 
             Vector3 startPos = _player.transform.position;
             float elapsed = 0f;
@@ -78,7 +78,7 @@ namespace NSJ_Player
 
             _player.transform.position = _player.InitialPosition.position;
             _canDefend = true;
-            GlobalEventManager.GlobalEvent?.OnDefenceEndInvoke();
+            Manager.Event?.OnDefenceEndInvoke();
         }
 
         private void OnDrawGizmosSelected()

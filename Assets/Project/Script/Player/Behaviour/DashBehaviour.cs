@@ -22,16 +22,16 @@ namespace NSJ_Player
 
         private void Start()
         {
-            if (GlobalEventManager.GlobalEvent == null) return;
-            GlobalEventManager.GlobalEvent.OnDefenceStart += OnDefenceStart;
-            GlobalEventManager.GlobalEvent.OnDefenceEnd += OnDefenceEnd;
+            if (Manager.Event == null) return;
+            Manager.Event.OnDefenceStart += OnDefenceStart;
+            Manager.Event.OnDefenceEnd += OnDefenceEnd;
         }
 
         private void OnDestroy()
         {
-            if (GlobalEventManager.GlobalEvent == null) return;
-            GlobalEventManager.GlobalEvent.OnDefenceStart -= OnDefenceStart;
-            GlobalEventManager.GlobalEvent.OnDefenceEnd -= OnDefenceEnd;
+            if (Manager.Event == null) return;
+            Manager.Event.OnDefenceStart -= OnDefenceStart;
+            Manager.Event.OnDefenceEnd -= OnDefenceEnd;
         }
 
         private void OnDefenceStart() => _isDefending = true;

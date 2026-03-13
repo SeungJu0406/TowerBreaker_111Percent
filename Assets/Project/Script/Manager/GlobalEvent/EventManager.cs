@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class GlobalEventComponent : MonoBehaviour
+public class EventManager : MonoBehaviour
 {
 
     public event UnityAction OnPlayerHit;
@@ -10,14 +10,14 @@ public class GlobalEventComponent : MonoBehaviour
 
     void Awake()
     {
-        GlobalEventManager.SetGlobalEvent(this);
+        Manager.SetEvent(this);
     }
 
     void OnDestroy()
     {
-        if (GlobalEventManager.GlobalEvent == this)
+        if (Manager.Event == this)
         {
-            GlobalEventManager.SetGlobalEvent(null);
+            Manager.SetEvent(null);
         }
     }
 

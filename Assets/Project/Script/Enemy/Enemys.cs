@@ -33,18 +33,26 @@ namespace NSJ_Enemy
             ControlEnemyInterval();
             InitEnemys();
 
-            GlobalEventManager.GlobalEvent.OnPlayerHit += HitPlayerAfter;
+            Manager.Event.OnPlayerHit += HitPlayerAfter;
         }
 
         private void OnDestroy()
         {
-            if (GlobalEventManager.GlobalEvent != null)
-                GlobalEventManager.GlobalEvent.OnPlayerHit -= HitPlayerAfter;
+            if (Manager.Event != null)
+                Manager.Event.OnPlayerHit -= HitPlayerAfter;
         }
 
         private void Update()
         {
             Move();
+        }
+
+        // 적 추가
+        public void AddEnemy(Enemy enemy)
+        {
+            _enemies.Add(enemy);
+            ControlEnemyInterval();
+            InitEnemys();
         }
 
         // 부모 이동 제어

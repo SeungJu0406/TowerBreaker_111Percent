@@ -53,13 +53,13 @@ namespace NSJ_Player
                 Die();
 
                 // 임시로 사용, 나중에 Die 이벤트로 변경
-                GlobalEventManager.GlobalEvent?.OnPlayerHitInvoke();
+                Manager.Event?.OnPlayerHitInvoke();
 
                 return;
             }
 
             // 이벤트 발생
-            GlobalEventManager.GlobalEvent?.OnPlayerHitInvoke();
+            Manager.Event?.OnPlayerHitInvoke();
         }
 
 
