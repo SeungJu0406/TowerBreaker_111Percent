@@ -28,11 +28,6 @@ namespace NSJ_Enemy
         private void Update()
         {
             Move();
-
-            //if (Input.GetKeyDown(KeyCode.Space))
-            //{
-            //    TestTakeDamage();
-            //}
         }
 
         // 부모 이동 제어
@@ -86,19 +81,5 @@ namespace NSJ_Enemy
                 enemy.SetNeighbor(prev,next);
             }
         }
-
-
-        //private void TestTakeDamage()
-        //{
-        //    for (int i = 0; i < _enemies.Count; i++)
-        //    {
-        //        Enemy enemy = _enemies[i];
-        //        if (enemy.CanHit == true)
-        //        {
-        //            enemy.TakeDamage(10f);
-        //            break;
-        //        }
-        //    }
-        //}
     }
 }
