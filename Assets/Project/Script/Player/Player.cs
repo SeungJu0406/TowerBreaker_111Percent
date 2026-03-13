@@ -1,16 +1,34 @@
+using NSJ_Enemy;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace NSJ_Player
 {
     public class Player : MonoBehaviour
     {
-        [SerializeField] private Transform _InitialPosition;
+        public Transform InitialPosition => _initialPosition;
+        [SerializeField] private Transform _initialPosition;
         [SerializeField] private int _health = 3;
-        [SerializeField] private float _moveBackDuration = 0.5f;
 
 
+        public bool IsEnemyCollide => _isEnemyCollide;  
+        private bool _isEnemyCollide = false;
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.gameObject.tag == Tag.Enemy)
+            {
 
+                _isEnemyCollide = true;
+            }
+        }
+        private void OnCollisionExit2D(Collision2D collision)
+        {
+            if (collision.gameObject.tag == Tag.Enemy)
+            {
+                _isEnemyCollide = false;
+            }
+        }
         public void TakeDamage()
         {
             // 데미지 판정
@@ -19,39 +37,24 @@ namespace NSJ_Player
             if (_health <= 0)
             {
                 Die();
+
+                // 임시로 사용, 나중에 Die 이벤트로 변경
+                GlobalEventManager.GlobalEvent?.OnPlayerHitInvoke();
+
                 return;
             }
 
             // 이벤트 발생
             GlobalEventManager.GlobalEvent?.OnPlayerHitInvoke();
-
-            // 처음 위치로 이동
-            MoveBack();
         }
 
-        public void MoveBack()
-        {
-            StartCoroutine(MoveBackCoroutine());
-        }
+
 
         private void Die()
         {
             Debug.Log("죽음");
         }
 
-        private IEnumerator MoveBackCoroutine()
-        {
-            Vector3 startPos = transform.position;
-            float elapsed = 0f;
 
-            while (elapsed < _moveBackDuration)
-            {
-                elapsed += Time.deltaTime;
-                transform.position = Vector3.Lerp(startPos, _InitialPosition.position, elapsed / _moveBackDuration);
-                yield return null;
-            }
-
-            transform.position = _InitialPosition.position;
-        }
     }
 }

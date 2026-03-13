@@ -20,7 +20,7 @@ namespace NSJ_Enemy
         [SerializeField] private float _moveSpeed;
         [SerializeField] private float _intervalDistance;
 
-
+        private bool _canMove = true;
         Rigidbody2D _rb;
 
         private void Awake()
@@ -50,6 +50,8 @@ namespace NSJ_Enemy
         // 부모 이동 제어
         private void Move()
         {
+            if (_canMove == false) return;
+
             // 이동 방향에 따른 이동
             Vector2 moveDirection = _direction == Direction.Left ? Vector2.left : Vector2.right;
             transform.Translate(moveDirection * _moveSpeed * Time.deltaTime);
@@ -101,13 +103,19 @@ namespace NSJ_Enemy
 
         private void HitPlayerAfter()
         {
-            SetMoveSpeed(0);
+            Stop();
         }
 
-        // 몹 뒤로 밀림 현상
-        public void KnockBack(float knockBackForce)
+
+        private void Stop()
         {
-            StartCoroutine(MoveBackCoroutine(knockBackForce, 0.5f));
+            _canMove = false;
+        }
+        // 몹 뒤로 밀림 현상
+        public void KnockBack(float knockBackForce, float duration)
+        {
+            _canMove = true;
+            StartCoroutine(MoveBackCoroutine(knockBackForce, duration));
         }
 
         IEnumerator MoveBackCoroutine(float knockBackForce, float duration)
