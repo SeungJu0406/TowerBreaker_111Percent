@@ -47,11 +47,11 @@ namespace NSJ_Enemy
         private void Die()
         {
             // 죽는 로직
+            _canHit = false;
+            _neighborInfo.NextNeighbor?.SetCanHit(true);
 
             // 죽는 이펙트
 
-            _canHit = false;
-            _neighborInfo.NextNeighbor?.SetCanHit(true);
 
             OnDie?.Invoke();
 

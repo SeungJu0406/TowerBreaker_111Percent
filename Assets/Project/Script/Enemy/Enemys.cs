@@ -1,6 +1,8 @@
 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Utility;
 
 namespace NSJ_Enemy
 {
@@ -16,13 +18,23 @@ namespace NSJ_Enemy
 
         [SerializeField] private Direction _direction;
         [SerializeField] private float _moveSpeed;
+        [SerializeField] private float _moveBackForce;
         [SerializeField] private float _intervalDistance;
 
+
+        Rigidbody2D _rb;
+
+        private void Awake()
+        {
+            _rb = GetComponent<Rigidbody2D>();
+        }
 
         private void Start()
         {
             ControlEnemyInterval();
             InitEnemys();
+
+            GlobalEventManager.GlobalEvent.OnPlayerHit += MoveBack;
         }
 
         private void Update()
@@ -65,7 +77,7 @@ namespace NSJ_Enemy
             for (int i = 0; i < _enemies.Count; i++)
             {
                 Enemy enemy = _enemies[i];
-         
+
                 if (i == 0)
                 {
                     enemy.SetCanHit(true);
@@ -78,8 +90,38 @@ namespace NSJ_Enemy
                 Enemy prev = i > 0 ? _enemies[i - 1] : null;
                 Enemy next = i < _enemies.Count - 1 ? _enemies[i + 1] : null;
 
-                enemy.SetNeighbor(prev,next);
+                enemy.SetNeighbor(prev, next);
             }
+        }
+
+        // 몹 뒤로 밀림 현상
+        public void MoveBack()
+        {
+            StartCoroutine(MoveBackCoroutine(0.5f));
+        }
+
+        IEnumerator MoveBackCoroutine(float duration)
+        {
+
+            float saveMoveSpeed = _moveSpeed;
+            // 이동속도 0
+            SetMoveSpeed(0);
+            _rb.bodyType = RigidbodyType2D.Dynamic;
+            // Rigidbody2D의 AddForce로 뒤로 밀림
+            Vector2 dir = _direction == Direction.Left ? Vector2.right : Vector2.left;
+            _rb.AddForce(dir * _moveBackForce, ForceMode2D.Impulse);
+
+            yield return duration.Second();
+            // velocity 초기화
+            _rb.linearVelocity = Vector2.zero;
+            // 이동속도 원래대로
+            SetMoveSpeed(saveMoveSpeed);
+        }
+
+        private void SetMoveSpeed(float moveSpeed) 
+        {
+            _moveSpeed = moveSpeed;
+            _rb.bodyType = _moveSpeed > 0 ? RigidbodyType2D.Kinematic : RigidbodyType2D.Dynamic;
         }
     }
 }
