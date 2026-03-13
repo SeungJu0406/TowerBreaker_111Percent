@@ -20,6 +20,7 @@ namespace NSJ_Player
 
 
         private bool _canDefend = true;
+        // 층 전환 중에는 방어 불가 — 화면 밖에 있는 상태에서 방어가 작동하면 위치 복귀 로직이 충돌함
         private bool _isTransitioning = false;
 
         private void Awake()
@@ -47,6 +48,7 @@ namespace NSJ_Player
 
         private void Update()
         {
+            // _isTransitioning: 층 전환 연출 중에는 입력 차단
             if (_canDefend == false || _isTransitioning) return;
 
             if (Input.GetKeyDown(_defenceKey))

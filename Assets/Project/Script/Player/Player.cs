@@ -12,7 +12,9 @@ namespace NSJ_Player
         public float AttackPower => _attackPower;
 
         [Header("Stage Transition")]
+        // 화면 밖으로 나가는 거리 (카메라 범위 밖이 되도록 충분히 크게 설정)
         [SerializeField] private float _offScreenDistance = 20f;
+        // 화면 밖 이동에 걸리는 시간(초) — 층 하강 연출(_transitionDuration)보다 짧게 설정 권장
         [SerializeField] private float _transitionMoveDuration = 0.5f;
 
         public bool IsCollide => _isCollide;
@@ -21,6 +23,7 @@ namespace NSJ_Player
         private void Start()
         {
             if (Manager.Event == null) return;
+            // 전환 시작 → 화면 밖으로 이동 / 전환 완료 → InitialPosition으로 복귀
             Manager.Event.OnStageTransitionStart += OnTransitionStart;
             Manager.Event.OnStageTransitionEnd += OnTransitionEnd;
         }
@@ -34,8 +37,14 @@ namespace NSJ_Player
 
         private void OnTransitionStart() => StartCoroutine(MoveOffScreenCoroutine());
 
+        // 전환이 완료되면 위치를 스냅으로 복귀
+        // 코루틴 없이 즉시 이동하는 이유:
+        // 층 이동 연출이 끝난 시점에서 플레이어가 갑자기 나타나는 연출이 자연스러움
+        // (카메라 밖에서 갑자기 등장 = 시작 위치에서 뿅 나오는 느낌)
         private void OnTransitionEnd() => transform.position = _initialPosition.position;
 
+        // 층 전환 연출 중 플레이어를 카메라 위쪽 밖으로 이동
+        // Lerp로 부드럽게 올라가게 해서 '올라가는 느낌'을 줌
         private IEnumerator MoveOffScreenCoroutine()
         {
             Vector3 start = transform.position;

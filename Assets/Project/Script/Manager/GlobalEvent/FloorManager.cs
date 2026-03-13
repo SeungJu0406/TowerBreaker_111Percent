@@ -8,11 +8,17 @@ public class FloorManager : MonoBehaviour
     [SerializeField] private Floor _floorPrefab;
 
     [Header("Transition")]
+    // 플로어 간 수직 간격 (Y축 기준, 위로 쌓임)
     [SerializeField] private float _floorHeight = 10f;
+    // 층 이동 연출에 걸리는 시간(초)
     [SerializeField] private float _transitionDuration = 1f;
 
     private Floor _currentFloor;
     private int _currentFloorIndex;
+
+    // Key = 플로어 인덱스, Value = 실제 Floor 오브젝트
+    // List 대신 Dictionary를 쓴 이유:
+    // 층 번호로 즉시 접근 + 중간 층 삭제가 필요해서 인덱스 기반 관리가 편함
     private Dictionary<int, Floor> _activeFloors = new Dictionary<int, Floor>();
 
     void Awake()
@@ -22,11 +28,13 @@ public class FloorManager : MonoBehaviour
 
     void Start()
     {
-        // 현재 층 + 앞 3층 생성
+        // 시작 시 현재 층(0) + 최대 앞 3층까지 미리 생성
+        // 이유: 전환 연출 도중 다음 층이 이미 화면에 보여야 하므로 사전 생성 필요
         int preloadCount = Mathf.Min(3, _floorData.Count - 1);
         for (int i = 0; i <= preloadCount; i++)
             SpawnFloor(i);
 
+        // 0번 플로어를 현재 층으로 설정하고 시작
         _currentFloorIndex = 0;
         _currentFloor = _activeFloors[0];
         _currentFloor.OnFloorCleared += OnCurrentFloorCleared;
@@ -39,6 +47,8 @@ public class FloorManager : MonoBehaviour
             Manager.SetFloor(null);
     }
 
+    // 플로어 프리팹을 생성하고 적을 배치
+    // 위치: index * _floorHeight → 현재 층 위로 한 칸씩 올라가는 구조
     private void SpawnFloor(int index)
     {
         Floor floor = Instantiate(_floorPrefab, new Vector3(0, index * _floorHeight, 0), Quaternion.identity);
@@ -46,23 +56,34 @@ public class FloorManager : MonoBehaviour
         _activeFloors[index] = floor;
     }
 
+    // 현재 플로어의 모든 적이 죽었을 때 Floor에서 이 콜백 호출
     private void OnCurrentFloorCleared()
     {
+        // 이벤트 중복 구독 방지 (다음 전환 때 다시 등록하므로 여기서 해제)
         _currentFloor.OnFloorCleared -= OnCurrentFloorCleared;
         Manager.Event?.OnStageClearInvoke();
         StartCoroutine(TransitionCoroutine());
     }
 
+    // ─── 전환 흐름 ──────────────────────────────────────────────
+    // 1. OnStageTransitionStart 발생 → 플레이어 입력 차단 + 화면 밖 이동
+    // 2. 현재 활성 플로어 전체를 아래로 밀어내는 연출
+    // 3. 연출 완료 후 다음 층을 currentFloor로 전환, 적 이동 시작
+    // 4. 앞 3층 추가 생성 / 뒤 낙오 층 삭제
+    // 5. OnStageTransitionEnd 발생 → 플레이어 복귀 + 입력 허용
+    // ──────────────────────────────────────────────────────────────
     private IEnumerator TransitionCoroutine()
     {
         Manager.Event?.OnStageTransitionStartInvoke();
 
-        // 모든 활성 플로어 시작 위치 캡처
+        // 코루틴 실행 중 _activeFloors가 변경되면 안 되므로
+        // 시작 시점의 위치를 리스트로 캡처해 둠
         var floorMoves = new List<(Floor floor, Vector3 startPos)>();
         foreach (var kv in _activeFloors)
             floorMoves.Add((kv.Value, kv.Value.transform.position));
 
-        // 플로어들 아래로 이동
+        // Lerp로 _transitionDuration 동안 모든 플로어를 아래로 이동
+        // → 플레이어 기준으로 "층이 내려가는" 시각적 연출
         float elapsed = 0f;
         while (elapsed < _transitionDuration)
         {
@@ -73,13 +94,13 @@ public class FloorManager : MonoBehaviour
             yield return null;
         }
 
-        // 최종 위치 고정
+        // Lerp는 부동소수점 오차가 있으므로 완료 후 정확한 위치로 고정
         foreach (var (floor, startPos) in floorMoves)
             floor.transform.position = startPos + Vector3.down * _floorHeight;
 
         _currentFloorIndex++;
 
-        // 다음 층 세팅
+        // 다음 층 활성화 및 클리어 이벤트 재등록
         _currentFloor = _activeFloors[_currentFloorIndex];
         _currentFloor.OnFloorCleared += OnCurrentFloorCleared;
         _currentFloor.StartFloor();
@@ -87,10 +108,12 @@ public class FloorManager : MonoBehaviour
         CreateFloor();
         DestroyFloor();
 
+        // 플레이어를 InitialPosition으로 되돌리고 입력 허용
         Manager.Event?.OnStageTransitionEndInvoke();
     }
 
-    // 현재 층으로부터 +3층 생성
+    // 현재 층으로부터 +3층까지 미리 생성
+    // 이미 생성된 층은 ContainsKey로 중복 방지
     private void CreateFloor()
     {
         for (int i = _currentFloorIndex + 1; i <= _currentFloorIndex + 3; i++)
@@ -100,7 +123,8 @@ public class FloorManager : MonoBehaviour
         }
     }
 
-    // 현재 층으로부터 -2층 삭제
+    // 현재 층 기준 2층 이상 뒤에 있는 플로어 삭제
+    // 이유: 더 이상 보이지 않는 층을 메모리에 계속 유지할 필요가 없음
     private void DestroyFloor()
     {
         var toDestroy = new List<int>();

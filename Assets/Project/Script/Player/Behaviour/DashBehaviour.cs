@@ -13,6 +13,7 @@ namespace NSJ_Player
 
         private bool _canDash = true;
         private bool _isDefending = false;
+        // 층 전환 중에는 대쉬 불가 — 화면 밖 이동 중 대쉬하면 위치가 엇나갈 수 있음
         private bool _isTransitioning = false;
 
         private void Awake()
@@ -46,6 +47,7 @@ namespace NSJ_Player
 
         private void Update()
         {
+            // _isTransitioning: 층 전환 연출 중에는 입력 차단
             if (_canDash == false || _isDefending || _isTransitioning) return;
 
             if (Input.GetKeyDown(_dashKey))

@@ -21,9 +21,16 @@ namespace NSJ_Enemy
         [SerializeField] private float _moveSpeed;
         [SerializeField] private float _intervalDistance;
 
+        // Floor가 구독 → 이 그룹의 적이 전원 사망하면 클리어 카운트 증가
         public event UnityAction OnAllEnemiesDead;
 
+        // false로 시작하는 이유:
+        // 층이 생성된 직후에는 아직 "플레이 중"이 아님
+        // Floor.StartFloor() → Resume()이 호출될 때 비로소 이동 시작
+        // 덕분에 전환 연출 중 적이 움직이지 않음
         private bool _canMove = false;
+
+        // 사망한 적 수 카운터 (전원 사망 감지용)
         private int _deadCount = 0;
         Rigidbody2D _rb;
 
@@ -34,6 +41,8 @@ namespace NSJ_Enemy
 
         private void Start()
         {
+            // 인스펙터에 미리 배치된 적(pre-placed)에 대한 사망 이벤트 구독
+            // AddEnemy()를 통해 추가된 적은 AddEnemy() 안에서 따로 구독함
             foreach (var enemy in _enemies)
                 enemy.OnDie += OnEnemyDied;
 
@@ -57,15 +66,18 @@ namespace NSJ_Enemy
         // 적 추가
         public void AddEnemy(Enemy enemy)
         {
+            // 동적으로 추가되는 적도 사망 이벤트 구독
             enemy.OnDie += OnEnemyDied;
             _enemies.Add(enemy);
             ControlEnemyInterval();
             InitEnemys();
         }
 
-        // 전환 시 이동 활성화
+        // Floor.StartFloor()에서 호출 → 층 시작 시 이동 허용
         public void Resume() => _canMove = true;
 
+        // 적 한 명이 죽을 때마다 카운트
+        // _enemies.Count에 도달하면 이 그룹의 전원 사망으로 판단
         private void OnEnemyDied()
         {
             _deadCount++;

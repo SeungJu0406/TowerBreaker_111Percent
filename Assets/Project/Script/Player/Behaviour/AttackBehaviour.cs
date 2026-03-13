@@ -15,6 +15,7 @@ namespace NSJ_Player
 
 
         private bool _canAttack = true;
+        // 층 전환 중에는 공격 불가 — 플레이어가 화면 밖에 있으므로 입력을 막음
         private bool _isTransitioning = false;
 
         private void Awake()
@@ -42,6 +43,7 @@ namespace NSJ_Player
 
         private void Update()
         {
+            // _isTransitioning: 층 전환 연출 중에는 입력 차단
             if (_canAttack == false || _isTransitioning) return;
 
             if (Input.GetKeyDown(_attackKey))
