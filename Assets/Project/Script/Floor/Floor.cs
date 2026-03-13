@@ -12,6 +12,7 @@ public class Floor : MonoBehaviour
     public void StartFloor()
     {
         // 스타트하면 적이 이제부터 움직일 수 있음
+        // 각 Enemys 의 InitEnemy 를 호출하고 움직일 수 있도록 설정
     }
 
     // 적 생성

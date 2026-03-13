@@ -8,6 +8,9 @@ public class EventManager : MonoBehaviour
     public event UnityAction OnDefenceStart;
     public event UnityAction OnDefenceEnd;
 
+    public event UnityAction OnStageClear;
+    public event UnityAction OnTransitionStart;
+    public event UnityAction OnTransitionEnd;
     void Awake()
     {
         Manager.SetEvent(this);

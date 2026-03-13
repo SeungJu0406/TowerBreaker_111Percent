@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using Utility;
 
 namespace NSJ_Enemy
@@ -14,11 +15,15 @@ namespace NSJ_Enemy
 
     public class Enemys : MonoBehaviour
     {
+        public List<Enemy> Enemies => _enemies;
         [SerializeField] private List<Enemy> _enemies;
 
         [SerializeField] private Direction _direction;
         [SerializeField] private float _moveSpeed;
         [SerializeField] private float _intervalDistance;
+
+
+        public event UnityAction OnAllEnemiesDead;
 
         private bool _canMove = true;
         Rigidbody2D _rb;
@@ -30,14 +35,13 @@ namespace NSJ_Enemy
 
         private void Start()
         {
-            ControlEnemyInterval();
-            InitEnemys();
 
-            Manager.Event.OnPlayerHit += HitPlayerAfter;
+
         }
 
         private void OnDestroy()
         {
+            // 에러가 생길수도 있을 듯
             if (Manager.Event != null)
                 Manager.Event.OnPlayerHit -= HitPlayerAfter;
         }
@@ -51,8 +55,15 @@ namespace NSJ_Enemy
         public void AddEnemy(Enemy enemy)
         {
             _enemies.Add(enemy);
+        }
+
+        private void InitEnemy()
+        {
+            // 플로어 시작시 호출되어야함
             ControlEnemyInterval();
             InitEnemys();
+
+            Manager.Event.OnPlayerHit += HitPlayerAfter;
         }
 
         // 부모 이동 제어
