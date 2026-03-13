@@ -20,6 +20,7 @@ namespace NSJ_Player
 
 
         private bool _canDefend = true;
+        private bool _isTransitioning = false;
 
         private void Awake()
         {
@@ -27,9 +28,26 @@ namespace NSJ_Player
                 _player = GetComponentInParent<Player>();
         }
 
+        private void Start()
+        {
+            if (Manager.Event == null) return;
+            Manager.Event.OnStageTransitionStart += OnTransitionStart;
+            Manager.Event.OnStageTransitionEnd += OnTransitionEnd;
+        }
+
+        private void OnDestroy()
+        {
+            if (Manager.Event == null) return;
+            Manager.Event.OnStageTransitionStart -= OnTransitionStart;
+            Manager.Event.OnStageTransitionEnd -= OnTransitionEnd;
+        }
+
+        private void OnTransitionStart() => _isTransitioning = true;
+        private void OnTransitionEnd() => _isTransitioning = false;
+
         private void Update()
         {
-            if (_canDefend == false) return;
+            if (_canDefend == false || _isTransitioning) return;
 
             if (Input.GetKeyDown(_defenceKey))
             {

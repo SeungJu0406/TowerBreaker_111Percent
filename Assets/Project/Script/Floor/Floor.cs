@@ -2,16 +2,32 @@
 using NSJ_Enemy;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Floor : MonoBehaviour
 {
     // 적을 모아둘 리스트
     [SerializeField] private List<Enemys> enemysGroup;
 
+    public event UnityAction OnFloorCleared;
+    private int _clearedGroupCount;
+
     // 스테이지 스타트
     public void StartFloor()
     {
-        // 스타트하면 적이 이제부터 움직일 수 있음
+        _clearedGroupCount = 0;
+        foreach (var enemys in enemysGroup)
+        {
+            enemys.OnAllEnemiesDead += OnEnemysGroupCleared;
+            enemys.Resume();
+        }
+    }
+
+    private void OnEnemysGroupCleared()
+    {
+        _clearedGroupCount++;
+        if (_clearedGroupCount >= enemysGroup.Count && enemysGroup.Count > 0)
+            OnFloorCleared?.Invoke();
     }
 
     // 적 생성
@@ -20,7 +36,7 @@ public class Floor : MonoBehaviour
         // floorData의 EnemyGroup을 이용하여 적 생성
         int enemyGroupCount = 0;
         foreach (var enemyGroup in floorData.EnemysGroup)
-        {   
+        {
             List<Enemy> enemies = enemyGroup.Enemies;
             for (int i = 0; i < enemies.Count; i++)
             {
@@ -31,5 +47,5 @@ public class Floor : MonoBehaviour
             }
             enemyGroupCount++;
         }
-    } 
+    }
 }

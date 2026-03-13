@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace NSJ_Player
@@ -10,9 +11,43 @@ namespace NSJ_Player
         [SerializeField] private float _attackPower;
         public float AttackPower => _attackPower;
 
+        [Header("Stage Transition")]
+        [SerializeField] private float _offScreenDistance = 20f;
+        [SerializeField] private float _transitionMoveDuration = 0.5f;
 
         public bool IsCollide => _isCollide;
         private bool _isCollide = false;
+
+        private void Start()
+        {
+            if (Manager.Event == null) return;
+            Manager.Event.OnStageTransitionStart += OnTransitionStart;
+            Manager.Event.OnStageTransitionEnd += OnTransitionEnd;
+        }
+
+        private void OnDestroy()
+        {
+            if (Manager.Event == null) return;
+            Manager.Event.OnStageTransitionStart -= OnTransitionStart;
+            Manager.Event.OnStageTransitionEnd -= OnTransitionEnd;
+        }
+
+        private void OnTransitionStart() => StartCoroutine(MoveOffScreenCoroutine());
+
+        private void OnTransitionEnd() => transform.position = _initialPosition.position;
+
+        private IEnumerator MoveOffScreenCoroutine()
+        {
+            Vector3 start = transform.position;
+            Vector3 target = start + Vector3.up * _offScreenDistance;
+            float elapsed = 0f;
+            while (elapsed < _transitionMoveDuration)
+            {
+                elapsed += Time.deltaTime;
+                transform.position = Vector3.Lerp(start, target, elapsed / _transitionMoveDuration);
+                yield return null;
+            }
+        }
 
         private void OnCollisionEnter2D(Collision2D collision)
         {

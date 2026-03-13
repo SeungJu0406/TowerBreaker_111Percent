@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using Utility;
 
 namespace NSJ_Enemy
@@ -20,7 +21,10 @@ namespace NSJ_Enemy
         [SerializeField] private float _moveSpeed;
         [SerializeField] private float _intervalDistance;
 
-        private bool _canMove = true;
+        public event UnityAction OnAllEnemiesDead;
+
+        private bool _canMove = false;
+        private int _deadCount = 0;
         Rigidbody2D _rb;
 
         private void Awake()
@@ -30,6 +34,9 @@ namespace NSJ_Enemy
 
         private void Start()
         {
+            foreach (var enemy in _enemies)
+                enemy.OnDie += OnEnemyDied;
+
             ControlEnemyInterval();
             InitEnemys();
 
@@ -50,9 +57,20 @@ namespace NSJ_Enemy
         // 적 추가
         public void AddEnemy(Enemy enemy)
         {
+            enemy.OnDie += OnEnemyDied;
             _enemies.Add(enemy);
             ControlEnemyInterval();
             InitEnemys();
+        }
+
+        // 전환 시 이동 활성화
+        public void Resume() => _canMove = true;
+
+        private void OnEnemyDied()
+        {
+            _deadCount++;
+            if (_deadCount >= _enemies.Count)
+                OnAllEnemiesDead?.Invoke();
         }
 
         // 부모 이동 제어

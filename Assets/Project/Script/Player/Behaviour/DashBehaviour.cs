@@ -13,7 +13,8 @@ namespace NSJ_Player
 
         private bool _canDash = true;
         private bool _isDefending = false;
-        
+        private bool _isTransitioning = false;
+
         private void Awake()
         {
             if (_player == null)
@@ -25,6 +26,8 @@ namespace NSJ_Player
             if (Manager.Event == null) return;
             Manager.Event.OnDefenceStart += OnDefenceStart;
             Manager.Event.OnDefenceEnd += OnDefenceEnd;
+            Manager.Event.OnStageTransitionStart += OnTransitionStart;
+            Manager.Event.OnStageTransitionEnd += OnTransitionEnd;
         }
 
         private void OnDestroy()
@@ -32,14 +35,18 @@ namespace NSJ_Player
             if (Manager.Event == null) return;
             Manager.Event.OnDefenceStart -= OnDefenceStart;
             Manager.Event.OnDefenceEnd -= OnDefenceEnd;
+            Manager.Event.OnStageTransitionStart -= OnTransitionStart;
+            Manager.Event.OnStageTransitionEnd -= OnTransitionEnd;
         }
 
         private void OnDefenceStart() => _isDefending = true;
         private void OnDefenceEnd() => _isDefending = false;
+        private void OnTransitionStart() => _isTransitioning = true;
+        private void OnTransitionEnd() => _isTransitioning = false;
 
         private void Update()
         {
-            if (_canDash == false || _isDefending) return;
+            if (_canDash == false || _isDefending || _isTransitioning) return;
 
             if (Input.GetKeyDown(_dashKey))
             {
