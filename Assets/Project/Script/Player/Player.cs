@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace NSJ_Player
@@ -6,6 +7,7 @@ namespace NSJ_Player
     {
         [SerializeField] private Transform _InitialPosition;
         [SerializeField] private int _health = 3;
+        [SerializeField] private float _moveBackDuration = 0.5f;
 
 
 
@@ -17,13 +19,14 @@ namespace NSJ_Player
             if (_health <= 0)
             {
                 Die();
+                return;
             }
 
             // 이벤트 발생
-            GlobalEventManager.GlobalEvent.OnPlayerHitInvoke();
+            GlobalEventManager.GlobalEvent?.OnPlayerHitInvoke();
 
             // 처음 위치로 이동
-            MoveBack();
+            StartCoroutine(MoveBackCoroutine());
         }
 
         private void Die()
@@ -31,10 +34,19 @@ namespace NSJ_Player
             Debug.Log("죽음");
         }
 
-        private void MoveBack()
+        private IEnumerator MoveBackCoroutine()
         {
-            // 처음 위치로 이동하는 로직
-            transform.position = Vector3.Lerp(transform.position, _InitialPosition.position, 0.5f);
+            Vector3 startPos = transform.position;
+            float elapsed = 0f;
+
+            while (elapsed < _moveBackDuration)
+            {
+                elapsed += Time.deltaTime;
+                transform.position = Vector3.Lerp(startPos, _InitialPosition.position, elapsed / _moveBackDuration);
+                yield return null;
+            }
+
+            transform.position = _InitialPosition.position;
         }
     }
 }
