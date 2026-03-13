@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 namespace NSJ_Player
@@ -12,21 +11,34 @@ namespace NSJ_Player
         public float AttackPower => _attackPower;
 
 
-        public bool IsCollide => _isCollide;  
+        public bool IsCollide => _isCollide;
         private bool _isCollide = false;
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (collision.gameObject.CompareTag(Tag.Enemy) ||
-                collision.gameObject.CompareTag(Tag.Boundary))
+            if (collision.gameObject.CompareTag(Tag.Enemy))
             {
                 _isCollide = true;
             }
         }
         private void OnCollisionExit2D(Collision2D collision)
         {
-            if (collision.gameObject.CompareTag(Tag.Enemy) ||
-                collision.gameObject.CompareTag(Tag.Boundary))
+            if (collision.gameObject.CompareTag(Tag.Enemy))
+            {
+                _isCollide = false;
+            }
+        }
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.gameObject.CompareTag(Tag.Boundary))
+            {
+                _isCollide = true;
+            }
+
+        }
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            if (collision.gameObject.CompareTag(Tag.Boundary))
             {
                 _isCollide = false;
             }
