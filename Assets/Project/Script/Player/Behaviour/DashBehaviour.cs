@@ -40,7 +40,7 @@ namespace NSJ_Player
 
             // 앞으로 이동 Transform.TransLate 사용
             // 적과 충돌전 까지
-            while (_player.IsEnemyCollide == false)
+            while (_player.IsCollide == false)
             {
                 _player.transform.Translate(Vector2.right * _dashSpeed * Time.deltaTime);
                 yield return null;

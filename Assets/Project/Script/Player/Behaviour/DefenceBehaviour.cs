@@ -10,8 +10,8 @@ namespace NSJ_Player
         [SerializeField] private KeyCode _defenceKey = KeyCode.X;
 
         [Header("Overlap")]
-        [SerializeField] private Vector2 _overlapOffset;
-        [SerializeField] private Vector2 _overlapSize;
+        [SerializeField] private Vector2 _overlapOffset = new Vector2(0.5f, 0.5f);
+        [SerializeField] private Vector2 _overlapSize = new Vector2(0.5f, 1f);
         [SerializeField] private LayerMask _enemyLayer;
 
         [Header("KnockBack")]

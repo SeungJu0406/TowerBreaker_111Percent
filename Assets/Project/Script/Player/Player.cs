@@ -8,23 +8,26 @@ namespace NSJ_Player
         public Transform InitialPosition => _initialPosition;
         [SerializeField] private Transform _initialPosition;
         [SerializeField] private int _health = 3;
+        public float AttackPower;
 
 
-        public bool IsEnemyCollide => _isEnemyCollide;  
-        private bool _isEnemyCollide = false;
+        public bool IsCollide => _isCollide;  
+        private bool _isCollide = false;
+
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (collision.gameObject.CompareTag(Tag.Enemy))
+            if (collision.gameObject.CompareTag(Tag.Enemy) ||
+                collision.gameObject.CompareTag(Tag.Boundary))
             {
-
-                _isEnemyCollide = true;
+                _isCollide = true;
             }
         }
         private void OnCollisionExit2D(Collision2D collision)
         {
-            if (collision.gameObject.CompareTag(Tag.Enemy))
+            if (collision.gameObject.CompareTag(Tag.Enemy) ||
+                collision.gameObject.CompareTag(Tag.Boundary))
             {
-                _isEnemyCollide = false;
+                _isCollide = false;
             }
         }
         public void TakeDamage()

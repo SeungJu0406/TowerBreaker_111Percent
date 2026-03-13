@@ -1,6 +1,9 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
+using Utility;
 
 namespace NSJ_Enemy
 {
@@ -38,6 +41,9 @@ namespace NSJ_Enemy
 
             _hp -= damage;
 
+            // 테스트용 데미지 이펙트
+            TestDebugTakeDamage();
+
             if (_hp <= 0)
             {
                 Die();
@@ -57,6 +63,31 @@ namespace NSJ_Enemy
 
             // 비활성화
             gameObject.SetActive(false);
+        }
+
+
+
+
+
+
+        // --------- Debug -----------------------------------------------------------
+        SpriteRenderer _renderer;
+        Color _originColor;
+        void Awake()
+        {
+            _renderer = GetComponent<SpriteRenderer>();
+            _originColor = _renderer.color;
+
+        }
+        private void TestDebugTakeDamage()
+        {
+            StartCoroutine(DebugTakeDamgeRoutine());
+        }
+        IEnumerator DebugTakeDamgeRoutine()
+        {
+            _renderer.color = Color.yellow;
+            yield return 0.2f.Second();
+            _renderer.color = _originColor;
         }
     }
 }
