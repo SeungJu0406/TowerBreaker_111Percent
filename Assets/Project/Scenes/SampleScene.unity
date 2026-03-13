@@ -463,7 +463,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -663,7 +663,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _initialPosition: {fileID: 556072722}
   _health: 3
-  AttackPower: 3
+  _attackPower: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -902,6 +902,8 @@ MonoBehaviour:
   _player: {fileID: 0}
   _dashKey: 122
   _dashSpeed: 15
+  _canDash: 1
+  _isDefending: 0
 --- !u!114 &560529214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1054,7 +1056,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0

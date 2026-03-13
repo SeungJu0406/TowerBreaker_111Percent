@@ -13,21 +13,21 @@ namespace NSJ_Player
 
         private bool _canDash = true;
         private bool _isDefending = false;
-
+        
         private void Awake()
         {
             if (_player == null)
                 _player = GetComponentInParent<Player>();
         }
 
-        private void OnEnable()
+        private void Start()
         {
             if (GlobalEventManager.GlobalEvent == null) return;
             GlobalEventManager.GlobalEvent.OnDefenceStart += OnDefenceStart;
             GlobalEventManager.GlobalEvent.OnDefenceEnd += OnDefenceEnd;
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             if (GlobalEventManager.GlobalEvent == null) return;
             GlobalEventManager.GlobalEvent.OnDefenceStart -= OnDefenceStart;
@@ -43,6 +43,7 @@ namespace NSJ_Player
 
             if (Input.GetKeyDown(_dashKey))
             {
+                Debug.Log("Dash!");
                 Dash();
             }
         }
