@@ -5,6 +5,8 @@ public class GlobalEventComponent : MonoBehaviour
 {
 
     public event UnityAction OnPlayerHit;
+    public event UnityAction OnDefenceStart;
+    public event UnityAction OnDefenceEnd;
 
     void Awake()
     {
@@ -22,5 +24,15 @@ public class GlobalEventComponent : MonoBehaviour
     public void OnPlayerHitInvoke()
     {
         OnPlayerHit?.Invoke();
+    }
+
+    public void OnDefenceStartInvoke()
+    {
+        OnDefenceStart?.Invoke();
+    }
+
+    public void OnDefenceEndInvoke()
+    {
+        OnDefenceEnd?.Invoke();
     }
 }

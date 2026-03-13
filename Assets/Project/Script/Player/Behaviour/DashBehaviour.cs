@@ -12,6 +12,7 @@ namespace NSJ_Player
         [SerializeField] private float _dashSpeed = 10f;
 
         private bool _canDash = true;
+        private bool _isDefending = false;
 
         private void Awake()
         {
@@ -19,9 +20,26 @@ namespace NSJ_Player
                 _player = GetComponentInParent<Player>();
         }
 
+        private void OnEnable()
+        {
+            if (GlobalEventManager.GlobalEvent == null) return;
+            GlobalEventManager.GlobalEvent.OnDefenceStart += OnDefenceStart;
+            GlobalEventManager.GlobalEvent.OnDefenceEnd += OnDefenceEnd;
+        }
+
+        private void OnDisable()
+        {
+            if (GlobalEventManager.GlobalEvent == null) return;
+            GlobalEventManager.GlobalEvent.OnDefenceStart -= OnDefenceStart;
+            GlobalEventManager.GlobalEvent.OnDefenceEnd -= OnDefenceEnd;
+        }
+
+        private void OnDefenceStart() => _isDefending = true;
+        private void OnDefenceEnd() => _isDefending = false;
+
         private void Update()
         {
-            if (_canDash == false) return;
+            if (_canDash == false || _isDefending) return;
 
             if (Input.GetKeyDown(_dashKey))
             {
