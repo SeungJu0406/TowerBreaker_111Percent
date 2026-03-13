@@ -20,6 +20,7 @@ namespace NSJ_Player
         public bool IsCollide => _isCollide;
         private bool _isCollide = false;
         // 전환 중 왼쪽 Boundary를 통과할 때 피격 판정이 발생하는 버그 방지용
+        public bool IsTransitioning => _isTransitioning;
         private bool _isTransitioning = false;
 
         // FloorManager가 yield return으로 대기하며 순서를 제어하므로
@@ -98,6 +99,8 @@ namespace NSJ_Player
         public void TakeDamage()
         {
             // 데미지 판정
+            if( _isTransitioning) return;
+
             _health--;
 
             if (_health <= 0)

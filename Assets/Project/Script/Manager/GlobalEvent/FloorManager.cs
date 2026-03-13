@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using NSJ_Player;
 using UnityEngine;
+using Utility;
 
 public class FloorManager : MonoBehaviour
 {
@@ -125,7 +126,6 @@ public class FloorManager : MonoBehaviour
         _currentFloorIndex++;
         _currentFloor = _activeFloors[_currentFloorIndex];
         _currentFloor.OnFloorCleared += OnCurrentFloorCleared;
-        _currentFloor.StartFloor();
 
         CreateFloor();
         DestroyFloor();
@@ -133,6 +133,10 @@ public class FloorManager : MonoBehaviour
         // [4단계] 플레이어 왼쪽에서 등장
         // 새 층이 세팅된 뒤에 플레이어가 나타나므로 적과 타이밍이 맞음
         yield return StartCoroutine(_player.MoveFromLeftCoroutine());
+
+        yield return 0.5f.Second(); // 잠깐 대기 (선택 사항, 임시)   
+
+        _currentFloor.StartFloor();
 
         // 모든 연출 완료 → 입력 허용
         Manager.Event?.OnStageTransitionEndInvoke();
