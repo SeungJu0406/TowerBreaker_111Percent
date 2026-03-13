@@ -43,7 +43,6 @@ namespace NSJ_Player
 
             if (Input.GetKeyDown(_dashKey))
             {
-                Debug.Log("Dash!");
                 Dash();
             }
         }
