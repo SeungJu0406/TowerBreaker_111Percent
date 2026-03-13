@@ -5,24 +5,31 @@ namespace NSJ_Player
     public class Player : MonoBehaviour
     {
         [SerializeField] private Transform _InitialPosition;
+        [SerializeField] private int _health = 3;
 
-        // 적과 맞대면판정
-        private void OnCollisionEnter2D(Collision2D collision)
+
+
+        public void TakeDamage()
         {
-            if (collision.gameObject.CompareTag(Tag.Enemy))
+            // 데미지 판정
+            _health--;
+
+            if (_health <= 0)
             {
-                Debug.Log("적과 충돌");
+                Die();
             }
+
+            // 이벤트 발생
+            GlobalEventManager.GlobalEvent.OnPlayerHitInvoke();
+
+            // 처음 위치로 이동
+            MoveBack();
         }
 
-        private void Start()
+        private void Die()
         {
-            GlobalEventManager.GlobalEvent.OnPlayerHit += MoveBack;
+            Debug.Log("죽음");
         }
-
-        // 데미지 판정
-
-        // 처음 위치로 이동
 
         private void MoveBack()
         {

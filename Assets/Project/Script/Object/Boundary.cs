@@ -1,3 +1,4 @@
+using NSJ_Player;
 using UnityEngine;
 
 public class Boundary : MonoBehaviour
@@ -7,7 +8,8 @@ public class Boundary : MonoBehaviour
     {
         if (collision.gameObject.CompareTag(Tag.Player))
         {
-            GlobalEventManager.GlobalEvent.OnPlayerHitInvoke();
+            Player player = collision.gameObject.GetComponent<Player>();
+            player.TakeDamage();
         }
     }
 }

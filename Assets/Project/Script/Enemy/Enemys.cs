@@ -18,7 +18,6 @@ namespace NSJ_Enemy
 
         [SerializeField] private Direction _direction;
         [SerializeField] private float _moveSpeed;
-        [SerializeField] private float _moveBackForce;
         [SerializeField] private float _intervalDistance;
 
 
@@ -34,7 +33,13 @@ namespace NSJ_Enemy
             ControlEnemyInterval();
             InitEnemys();
 
-            GlobalEventManager.GlobalEvent.OnPlayerHit += MoveBack;
+            GlobalEventManager.GlobalEvent.OnPlayerHit += HitPlayerAfter;
+        }
+
+        private void OnDestroy()
+        {
+            if (GlobalEventManager.GlobalEvent != null)
+                GlobalEventManager.GlobalEvent.OnPlayerHit -= HitPlayerAfter;
         }
 
         private void Update()
@@ -94,13 +99,18 @@ namespace NSJ_Enemy
             }
         }
 
-        // 몹 뒤로 밀림 현상
-        public void MoveBack()
+        private void HitPlayerAfter()
         {
-            StartCoroutine(MoveBackCoroutine(0.5f));
+            SetMoveSpeed(0);
         }
 
-        IEnumerator MoveBackCoroutine(float duration)
+        // 몹 뒤로 밀림 현상
+        private void KnockBack(float knockBackForce)
+        {
+            StartCoroutine(MoveBackCoroutine(knockBackForce, 0.5f));
+        }
+
+        IEnumerator MoveBackCoroutine(float knockBackForce, float duration)
         {
 
             float saveMoveSpeed = _moveSpeed;
@@ -109,7 +119,7 @@ namespace NSJ_Enemy
             _rb.bodyType = RigidbodyType2D.Dynamic;
             // Rigidbody2D의 AddForce로 뒤로 밀림
             Vector2 dir = _direction == Direction.Left ? Vector2.right : Vector2.left;
-            _rb.AddForce(dir * _moveBackForce, ForceMode2D.Impulse);
+            _rb.AddForce(dir * knockBackForce, ForceMode2D.Impulse);
 
             yield return duration.Second();
             // velocity 초기화
@@ -118,7 +128,7 @@ namespace NSJ_Enemy
             SetMoveSpeed(saveMoveSpeed);
         }
 
-        private void SetMoveSpeed(float moveSpeed) 
+        private void SetMoveSpeed(float moveSpeed)
         {
             _moveSpeed = moveSpeed;
             _rb.bodyType = _moveSpeed > 0 ? RigidbodyType2D.Kinematic : RigidbodyType2D.Dynamic;
