@@ -8,7 +8,8 @@ namespace NSJ_Player
         public Transform InitialPosition => _initialPosition;
         [SerializeField] private Transform _initialPosition;
         [SerializeField] private int _health = 3;
-        public float AttackPower;
+        [SerializeField] private float _attackPower;
+        public float AttackPower => _attackPower;
 
 
         public bool IsCollide => _isCollide;  

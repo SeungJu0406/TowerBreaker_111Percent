@@ -41,9 +41,7 @@ namespace NSJ_Player
                 Enemy enemy = hit.GetComponent<Enemy>();
                 if (enemy == null || !enemy.CanHit) continue;
 
-                IHitable hitable = enemy.GetComponentInParent<IHitable>();
-                hitable.TakeDamage(_player.AttackPower);
-                break;
+                ((IHitable)enemy).TakeDamage(_player.AttackPower);
             }
         }
 
