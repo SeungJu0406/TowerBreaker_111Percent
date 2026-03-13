@@ -14,37 +14,18 @@ namespace NSJ_Player
         [Header("Stage Transition")]
         // 화면 밖으로 나가는 거리 (카메라 범위 밖이 되도록 충분히 크게 설정)
         [SerializeField] private float _offScreenDistance = 20f;
-        // 화면 밖 이동에 걸리는 시간(초) — 층 하강 연출(_transitionDuration)보다 짧게 설정 권장
+        // 화면 밖 이동 / 왼쪽 등장 각각에 걸리는 시간(초)
         [SerializeField] private float _transitionMoveDuration = 0.5f;
 
         public bool IsCollide => _isCollide;
         private bool _isCollide = false;
 
-        private void Start()
-        {
-            if (Manager.Event == null) return;
-            // 전환 시작 → 화면 밖으로 이동 / 전환 완료 → InitialPosition으로 복귀
-            Manager.Event.OnStageTransitionStart += OnTransitionStart;
-            Manager.Event.OnStageTransitionEnd += OnTransitionEnd;
-        }
+        // FloorManager가 yield return으로 대기하며 순서를 제어하므로
+        // Player는 이벤트를 직접 구독하지 않음 — 이동 코루틴만 public으로 제공
 
-        private void OnDestroy()
-        {
-            if (Manager.Event == null) return;
-            Manager.Event.OnStageTransitionStart -= OnTransitionStart;
-            Manager.Event.OnStageTransitionEnd -= OnTransitionEnd;
-        }
-
-        private void OnTransitionStart() => StartCoroutine(MoveOffScreenCoroutine());
-
-        // 전환이 완료되면 위치를 스냅으로 복귀
-        // 코루틴 없이 즉시 이동하는 이유:
-        // 층 이동 연출이 끝난 시점에서 플레이어가 갑자기 나타나는 연출이 자연스러움
-        // (카메라 밖에서 갑자기 등장 = 시작 위치에서 뿅 나오는 느낌)
-        private void OnTransitionEnd() => transform.position = _initialPosition.position;
-
-        // 층 전환 연출 중 플레이어를 카메라 오른쪽 밖으로 이동
-        private IEnumerator MoveOffScreenCoroutine()
+        // [전환 1단계] 오른쪽 화면 밖으로 이동
+        // FloorManager에서 yield return StartCoroutine(_player.MoveOffScreenCoroutine()) 로 호출
+        public IEnumerator MoveOffScreenCoroutine()
         {
             Vector3 start = transform.position;
             Vector3 target = start + Vector3.right * _offScreenDistance;
@@ -55,6 +36,25 @@ namespace NSJ_Player
                 transform.position = Vector3.Lerp(start, target, elapsed / _transitionMoveDuration);
                 yield return null;
             }
+        }
+
+        // [전환 3단계] 왼쪽 화면 밖에서 InitialPosition으로 등장
+        // 플로어 하강이 완료된 뒤 호출 → 새 층에 플레이어가 나타나는 연출
+        public IEnumerator MoveFromLeftCoroutine()
+        {
+            Vector3 target = _initialPosition.position;
+            // InitialPosition 기준 왼쪽으로 _offScreenDistance 만큼 떨어진 곳에서 시작
+            Vector3 start = new Vector3(target.x - _offScreenDistance, target.y, target.z);
+            transform.position = start;
+
+            float elapsed = 0f;
+            while (elapsed < _transitionMoveDuration)
+            {
+                elapsed += Time.deltaTime;
+                transform.position = Vector3.Lerp(start, target, elapsed / _transitionMoveDuration);
+                yield return null;
+            }
+            transform.position = target;
         }
 
         private void OnCollisionEnter2D(Collision2D collision)

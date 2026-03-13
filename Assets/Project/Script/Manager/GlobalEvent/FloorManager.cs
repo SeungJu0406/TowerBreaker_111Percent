@@ -1,17 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using NSJ_Player;
 using UnityEngine;
 
 public class FloorManager : MonoBehaviour
 {
     [SerializeField] private List<FloorData> _floorData;
     [SerializeField] private Floor _floorPrefab;
+    // 플레이어 이동 코루틴을 직접 yield 하기 위해 참조 필요
+    [SerializeField] private Player _player;
 
     [Header("Transition")]
     [SerializeField] private Vector3 _initPos = new Vector3(0, 0, 0);
     // 플로어 간 수직 간격 (Y축 기준, 위로 쌓임)
     [SerializeField] private float _floorHeight = 10f;
-    // 층 이동 연출에 걸리는 시간(초)
+    // 층 하강 연출에 걸리는 시간(초)
     [SerializeField] private float _transitionDuration = 1f;
 
    [SerializeField] private Floor _currentFloor;
@@ -63,20 +66,38 @@ public class FloorManager : MonoBehaviour
         // 이벤트 중복 구독 방지 (다음 전환 때 다시 등록하므로 여기서 해제)
         _currentFloor.OnFloorCleared -= OnCurrentFloorCleared;
         Manager.Event?.OnStageClearInvoke();
+
+        // 마지막 층인지 확인
+        // 다음 인덱스가 _floorData 범위를 벗어나면 더 이상 올라갈 층이 없음
+        if (_currentFloorIndex + 1 >= _floorData.Count)
+        {
+            // 최종 클리어 — 전환 없이 종료
+            // 나중에 게임 클리어 연출/UI/씬 전환으로 교체 예정
+            Debug.Log("최종 클리어!");
+            return;
+        }
+
         StartCoroutine(TransitionCoroutine());
     }
 
-    // ─── 전환 흐름 ──────────────────────────────────────────────
-    // 1. OnStageTransitionStart 발생 → 플레이어 입력 차단 + 화면 밖 이동
-    // 2. 현재 활성 플로어 전체를 아래로 밀어내는 연출
-    // 3. 연출 완료 후 다음 층을 currentFloor로 전환, 적 이동 시작
-    // 4. 앞 3층 추가 생성 / 뒤 낙오 층 삭제
-    // 5. OnStageTransitionEnd 발생 → 플레이어 복귀 + 입력 허용
-    // ──────────────────────────────────────────────────────────────
+    // ─── 전환 순서 ─────────────────────────────────────────────────────
+    // 1. OnStageTransitionStart → Behaviour 입력 차단
+    // 2. 플레이어가 위쪽 화면 밖으로 이동 (완료까지 대기)
+    // 3. 모든 활성 플로어가 아래로 하강 (완료까지 대기)
+    // 4. 다음 층 활성화, 앞 층 추가 생성, 낙오 층 삭제
+    // 5. 플레이어가 왼쪽 화면 밖 → InitialPosition으로 등장 (완료까지 대기)
+    // 6. OnStageTransitionEnd → 입력 허용
+    // ────────────────────────────────────────────────────────────────────
     private IEnumerator TransitionCoroutine()
     {
+        // 입력 차단 — 이 시점부터 플레이어가 복귀할 때까지 Behaviour들은 동작하지 않음
         Manager.Event?.OnStageTransitionStartInvoke();
 
+        // [1단계] 플레이어 먼저 화면 위로 퇴장
+        // yield return으로 완료를 기다린 후 플로어를 내림
+        yield return StartCoroutine(_player.MoveOffScreenCoroutine());
+
+        // [2단계] 플레이어가 사라진 후 플로어 하강 연출 시작
         // 코루틴 실행 중 _activeFloors가 변경되면 안 되므로
         // 시작 시점의 위치를 리스트로 캡처해 둠
         var floorMoves = new List<(Floor floor, Vector3 startPos)>();
@@ -84,7 +105,6 @@ public class FloorManager : MonoBehaviour
             floorMoves.Add((kv.Value, kv.Value.transform.position));
 
         // Lerp로 _transitionDuration 동안 모든 플로어를 아래로 이동
-        // → 플레이어 기준으로 "층이 내려가는" 시각적 연출
         float elapsed = 0f;
         while (elapsed < _transitionDuration)
         {
@@ -99,9 +119,8 @@ public class FloorManager : MonoBehaviour
         foreach (var (floor, startPos) in floorMoves)
             floor.transform.position = startPos + Vector3.down * _floorHeight;
 
+        // [3단계] 플로어 하강 완료 → 다음 층 활성화
         _currentFloorIndex++;
-
-        // 다음 층 활성화 및 클리어 이벤트 재등록
         _currentFloor = _activeFloors[_currentFloorIndex];
         _currentFloor.OnFloorCleared += OnCurrentFloorCleared;
         _currentFloor.StartFloor();
@@ -109,7 +128,11 @@ public class FloorManager : MonoBehaviour
         CreateFloor();
         DestroyFloor();
 
-        // 플레이어를 InitialPosition으로 되돌리고 입력 허용
+        // [4단계] 플레이어 왼쪽에서 등장
+        // 새 층이 세팅된 뒤에 플레이어가 나타나므로 적과 타이밍이 맞음
+        yield return StartCoroutine(_player.MoveFromLeftCoroutine());
+
+        // 모든 연출 완료 → 입력 허용
         Manager.Event?.OnStageTransitionEndInvoke();
     }
 
