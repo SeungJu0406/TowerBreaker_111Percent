@@ -1,7 +1,5 @@
-using NSJ_Enemy;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace NSJ_Player
 {
@@ -16,7 +14,7 @@ namespace NSJ_Player
         private bool _isEnemyCollide = false;
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (collision.gameObject.tag == Tag.Enemy)
+            if (collision.gameObject.CompareTag(Tag.Enemy))
             {
 
                 _isEnemyCollide = true;
@@ -24,7 +22,7 @@ namespace NSJ_Player
         }
         private void OnCollisionExit2D(Collision2D collision)
         {
-            if (collision.gameObject.tag == Tag.Enemy)
+            if (collision.gameObject.CompareTag(Tag.Enemy))
             {
                 _isEnemyCollide = false;
             }
