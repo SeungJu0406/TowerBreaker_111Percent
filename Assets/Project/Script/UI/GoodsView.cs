@@ -23,10 +23,10 @@ public class GoodsView : BaseView
         {
             UserDataManager.Instance.OnSkullCountChanged += UpdateSkullCount;
             UserDataManager.Instance.OnChestCountChanged += UpdateChestCount;
-            // 초기값 업데이트
-            UpdateSkullCount(UserDataManager.Instance.SkullCount);
-            UpdateChestCount(UserDataManager.Instance.ChestCount);
         }
+        // 초기값 업데이트
+        UpdateSkullCount(UserDataManager.Instance.SkullCount);
+        UpdateChestCount(UserDataManager.Instance.ChestCount);
     }
 
     private void OnDestroy()

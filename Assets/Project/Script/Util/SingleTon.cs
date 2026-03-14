@@ -2,13 +2,29 @@ using UnityEngine;
 
 namespace Utility
 {
-    public abstract class SingleTon<T> : MonoBehaviour where T : SingleTon<T>
+    // Claude - RuntimeInitializeOnLoadMethod는 제네릭 클래스에서 동작하지 않음
+    //         비제네릭 베이스를 따로 두어 정적 초기화를 담당하게 분리
+    public abstract class SingleTonBase : MonoBehaviour
+    {
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetAll()
+        {
+            s_isQuitting = false;
+        }
+
+        // Claude - isQuitting은 모든 싱글톤이 공유해야 하므로 베이스에서 관리
+        protected static bool s_isQuitting = false;
+
+        private void OnApplicationQuit() => s_isQuitting = true;
+        private void OnDestroy() { if (this == this) s_isQuitting = true; } // 실제 인스턴스 파괴 시
+    }
+
+    public abstract class SingleTon<T> : SingleTonBase where T : SingleTon<T>
     {
         protected static T _instance;
 
-        // Claude - 앱 종료 여부를 추적하는 플래그. 종료 시 새 인스턴스 생성을 막기 위해 사용
-        private static bool s_isQuitting = false;
-
+        // Claude - _instance 리셋은 각 제네릭 타입에서 Awake로 처리되므로
+        //         null 체크 + 이전 참조 유효성 검증으로 대응
         public static T Instance
         {
             get
@@ -20,6 +36,13 @@ namespace Utility
 
         private void Awake()
         {
+            // Claude - Domain Reload 꺼진 경우 이전 세션의 파괴된 오브젝트가
+            //         _instance에 남아있을 수 있으므로 null 체크 필요
+            if (_instance != null && _instance.Equals(null))
+            {
+                _instance = null;
+            }
+
             InitSingletonBefore();
             if (_instance == null)
             {
@@ -35,33 +58,19 @@ namespace Utility
             InitAwake();
         }
 
-        // Claude - 앱 종료 시작 시점에 호출되며, 이후 SetSingleton의 인스턴스 생성을 차단
-        private void OnApplicationQuit()
-        {
-            s_isQuitting = true;
-        }
-
-        // Claude - 씬 언로드 시에도 파괴될 수 있으므로 OnDestroy에서도 플래그 체크
-        //         단, 실제 종료가 아닌 중복 파괴(Destroy(gameObject))는 걸러냄
-        private void OnDestroy()
-        {
-            if (_instance == this)
-            {
-                s_isQuitting = true;
-            }
-        }
-
         protected virtual void InitSingletonBefore() { }
         protected abstract void InitAwake();
 
-        /// <summary>
-        /// 싱글톤 인스턴스를 설정합니다.
-        /// 앱 종료 중이라면 새 인스턴스를 생성하지 않습니다.
-        /// </summary>
         protected static void SetSingleton()
         {
-            // Claude - 종료 중이면 null을 반환하도록 즉시 탈출 (좀비 오브젝트 생성 방지)
             if (s_isQuitting) return;
+
+            // Claude - 제네릭 특성상 _instance 리셋이 SubsystemRegistration에서 안되므로
+            //         파괴된 오브젝트 참조 여부를 Equals(null)로 체크
+            if (_instance != null && _instance.Equals(null))
+            {
+                _instance = null;
+            }
 
             if (_instance == null)
             {
