@@ -1,4 +1,4 @@
-
+using AutoPool_Tool;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -110,7 +110,7 @@ public class BattleSystem : MonoBehaviour, IBattle
 
         DamageText textPrefab = Resources.Load<DamageText>("DamageUI");
 
-        DamageText text = Instantiate(textPrefab);
+        DamageText text = ObjectPool.Get(textPrefab);
         text.SetDamageText(HitPoint, damage, isCritical);
     }
 }

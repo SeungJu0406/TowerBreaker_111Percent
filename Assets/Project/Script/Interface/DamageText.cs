@@ -1,3 +1,4 @@
+using AutoPool_Tool;
 using NSJ_MVVM;
 using System.Collections;
 using TMPro;
@@ -77,7 +78,7 @@ public class DamageText : MonoBehaviour
             yield return null;
         }
 
-        Destroy(gameObject);
+        ObjectPool.Return(gameObject);
     }
     IEnumerator MoveUpRoutine()
     {
