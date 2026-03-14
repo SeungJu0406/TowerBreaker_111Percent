@@ -11,6 +11,8 @@ namespace NSJ_Player
         [SerializeField] private Vector2 _overlapOffset = new Vector2(0.5f, 0.5f);
         [SerializeField] private Vector2 _overlapSize = new Vector2(0.5f, 1f);
         [SerializeField] private LayerMask _enemyLayer;
+        // 상자는 Enemy와 별도 레이어 — 인스펙터에서 Chest 레이어 지정
+        [SerializeField] private LayerMask _chestLayer;
 
 
         private bool _canAttack = true;
@@ -63,6 +65,18 @@ namespace NSJ_Player
                 // 한 번의 공격으로 적 하나만 처리
                 // 이유: TakeDamage → Die() → NextNeighbor.SetCanHit(true) 가 같은 프레임에 실행되므로
                 // break 없이 계속 루프하면 방금 활성화된 뒤 적까지 동일 공격에 피격됨
+                break;
+            }
+
+            // 상자 공격 — 적과 별도 레이어로 검출
+            // 상자는 적이 모두 죽은 뒤 Unlock()이 호출돼야만 TryHit()이 true를 반환
+            Collider2D[] chestHits = Physics2D.OverlapBoxAll(center, _overlapSize, 0f, _chestLayer);
+            foreach (Collider2D hit in chestHits)
+            {
+                ChestObject chest = hit.GetComponent<ChestObject>();
+                if (chest == null) continue;
+
+                _battle.AttackTarget(chest, _player.AttackPower);
                 break;
             }
         }

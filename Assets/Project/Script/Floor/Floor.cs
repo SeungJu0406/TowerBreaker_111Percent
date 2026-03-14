@@ -10,16 +10,22 @@ public class Floor : MonoBehaviour
     [SerializeField] private List<Enemys> enemysGroup;
     [SerializeField] private Enemys _enemysPrefab;
     [SerializeField] private Transform _InitialEnemyPos;
-    // FloorManager가 구독 → 이 층의 모든 그룹이 클리어되면 전환 코루틴 시작
+
+    // 이 층에 배치된 상자 리스트 (인스펙터에서 직접 배치)
+    // 상자가 있는 방은 적 클리어 + 상자 전부 개봉까지 완료해야 다음 층으로 진입
+    [SerializeField] private List<ChestObject> _chests;
+
+    // FloorManager가 구독 → 이 층의 모든 조건(적 + 상자)이 충족되면 전환 시작
     public event UnityAction OnFloorCleared;
 
-    // 몇 개의 Enemys 그룹이 클리어됐는지 카운팅
     private int _clearedGroupCount;
+    private int _openedChestCount;
 
     // FloorManager.Start()에서 최초 1회, 이후 전환 완료 시마다 호출
     public void StartFloor()
     {
         _clearedGroupCount = 0;
+        _openedChestCount = 0;
 
         foreach (var enemys in enemysGroup)
         {
@@ -33,13 +39,50 @@ public class Floor : MonoBehaviour
     }
 
     // 하나의 Enemys 그룹이 전멸할 때마다 호출
-    // 모든 그룹이 클리어되면 OnFloorCleared 이벤트 발생
     private void OnEnemysGroupCleared()
     {
         _clearedGroupCount++;
 
-        // enemysGroup.Count > 0 체크: 빈 플로어에서 즉시 발동하는 오작동 방지
-        if (_clearedGroupCount >= enemysGroup.Count && enemysGroup.Count > 0)
+        // 아직 남은 그룹이 있으면 대기
+        if (_clearedGroupCount < enemysGroup.Count) return;
+
+        // 모든 적 그룹 클리어 완료
+        // 상자가 없으면 바로 층 클리어, 있으면 상자 잠금 해제 후 대기
+        if (_chests == null || _chests.Count == 0)
+        {
+            OnFloorCleared?.Invoke();
+        }
+        else
+        {
+            UnlockChests();
+        }
+    }
+
+    // 모든 적 사망 후 상자 잠금 해제
+    // 이 시점부터 플레이어가 상자를 공격할 수 있음
+    private void UnlockChests()
+    {
+        foreach (var chest in _chests)
+        {
+            if (chest == null) continue;
+            chest.Unlock();
+            chest.OnOpened += OnChestOpened;
+        }
+    }
+
+    // 상자 하나가 열릴 때마다 호출
+    private void OnChestOpened()
+    {
+        _openedChestCount++;
+
+        // 활성 상자 수 기준으로 체크 (null이거나 이미 비활성화된 것 제외)
+        int activeChestCount = 0;
+        foreach (var chest in _chests)
+        {
+            if (chest != null) activeChestCount++;
+        }
+
+        if (_openedChestCount >= activeChestCount)
             OnFloorCleared?.Invoke();
     }
 

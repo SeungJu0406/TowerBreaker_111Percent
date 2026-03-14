@@ -32,14 +32,17 @@ namespace NSJ_Player
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (collision.gameObject.CompareTag(Tag.Enemy))
+            if (collision.gameObject.CompareTag(Tag.Enemy) ||
+                collision.gameObject.CompareTag(Tag.Chest))
             {
+                // Chest도 대쉬를 막는 실제 물리 오브젝트 — 상자 앞에서 대쉬 정지
                 _isCollide = true;
             }
         }
         private void OnCollisionExit2D(Collision2D collision)
         {
-            if (collision.gameObject.CompareTag(Tag.Enemy))
+            if (collision.gameObject.CompareTag(Tag.Enemy) ||
+                collision.gameObject.CompareTag(Tag.Chest))
             {
                 _isCollide = false;
             }
