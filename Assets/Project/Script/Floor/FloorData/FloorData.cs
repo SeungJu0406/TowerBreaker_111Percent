@@ -9,6 +9,7 @@ public class FloorData : ScriptableObject
     public int FloorNumber;
     public List<EnemyGroup> EnemysGroup;
     public float FloorMultiplier = 1f;
+    public bool IsExistChest = false;
 }
 
 [Serializable]

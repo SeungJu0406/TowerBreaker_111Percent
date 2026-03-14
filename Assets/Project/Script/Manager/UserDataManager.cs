@@ -5,7 +5,7 @@ using Utility;
 
 public class UserDataManager : SingleTon<UserDataManager>
 {
-    public UserData UserData { get; private set; } = new UserData();
+    public UserData UserData = new UserData();
 
     public int SkullCount { get => UserData.SkullCount; set { UserData.SkullCount = value; OnSkullCountChanged?.Invoke(value); } }
     public int ChestCount { get => UserData.ChestCount; set { UserData.ChestCount = value; OnChestCountChanged?.Invoke(value); } }

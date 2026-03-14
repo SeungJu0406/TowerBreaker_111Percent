@@ -6,15 +6,17 @@ using UnityEngine.Events;
 
 public class Floor : MonoBehaviour
 {
-    // 이 층에 속한 Enemys 그룹 리스트 (프리팹에 미리 배치된 오브젝트들)
+    // 이 층에 속한 Enemys 그룹 리스트
     [SerializeField] private List<Enemys> enemysGroup;
     [SerializeField] private Enemys _enemysPrefab;
     [SerializeField] private Transform _InitialEnemyPos;
 
-    // 이 층에 배치된 상자 리스트 (인스펙터에서 직접 배치)
+    // 이 층에 배치된 상자 리스트
     // 상자가 있는 방은 적 클리어 + 상자 전부 개봉까지 완료해야 다음 층으로 진입
-    [SerializeField] private List<ChestObject> _chests;
-
+    [SerializeField]private ChestObject _chestObjectPrefab;
+    [SerializeField] private Transform _chestPos;
+    private ChestObject _chest;
+    
     // FloorManager가 구독 → 이 층의 모든 조건(적 + 상자)이 충족되면 전환 시작
     public event UnityAction OnFloorCleared;
 
@@ -48,7 +50,7 @@ public class Floor : MonoBehaviour
 
         // 모든 적 그룹 클리어 완료
         // 상자가 없으면 바로 층 클리어, 있으면 상자 잠금 해제 후 대기
-        if (_chests == null || _chests.Count == 0)
+        if (_chest == null)
         {
             OnFloorCleared?.Invoke();
         }
@@ -62,12 +64,9 @@ public class Floor : MonoBehaviour
     // 이 시점부터 플레이어가 상자를 공격할 수 있음
     private void UnlockChests()
     {
-        foreach (var chest in _chests)
-        {
-            if (chest == null) continue;
-            chest.Unlock();
-            chest.OnOpened += OnChestOpened;
-        }
+        if (_chest == null) return;
+        _chest.Unlock();
+        _chest.OnOpened += OnChestOpened;
     }
 
     // 상자 하나가 열릴 때마다 호출
@@ -77,10 +76,9 @@ public class Floor : MonoBehaviour
 
         // 활성 상자 수 기준으로 체크 (null이거나 이미 비활성화된 것 제외)
         int activeChestCount = 0;
-        foreach (var chest in _chests)
-        {
-            if (chest != null) activeChestCount++;
-        }
+
+        if (_chest != null) activeChestCount++;
+
 
         if (_openedChestCount >= activeChestCount)
             OnFloorCleared?.Invoke();
@@ -106,6 +104,17 @@ public class Floor : MonoBehaviour
                 newEnemys.AddEnemy(newEnemy);
             }
             enemyGroupCount++;
+        }
+    }
+
+    // 상자 생성
+
+    public void CreateChest(FloorData floorData)
+    {
+        if (floorData.IsExistChest)
+        {
+            _chest = Instantiate(_chestObjectPrefab, transform);
+            _chest.transform.position = _chestPos.position;
         }
     }
 }

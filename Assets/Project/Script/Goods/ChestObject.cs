@@ -16,6 +16,7 @@ using UnityEngine.Events;
 /// </summary>
 public class ChestObject : MonoBehaviour, IHitable
 {
+    [SerializeField] private float _hp = 20;
     // 층의 모든 적이 죽기 전까지 false — 때릴 수 없는 무적 상태
     private bool _canHit = false;
 
@@ -38,7 +39,12 @@ public class ChestObject : MonoBehaviour, IHitable
     {
         if (!_canHit) return 0;
 
-        Die();
+        _hp -= damage;
+
+        if(_hp <= 0)
+        {
+            Die();
+        }
         return damage;
     }
 

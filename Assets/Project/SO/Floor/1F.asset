@@ -22,3 +22,4 @@ MonoBehaviour:
     - {fileID: 5932213895478614782, guid: ae0d764c6deb4ec4d9a4f300b1c630dc, type: 3}
     - {fileID: 5932213895478614782, guid: ae0d764c6deb4ec4d9a4f300b1c630dc, type: 3}
   FloorMultiplier: 1
+  IsExistChest: 1

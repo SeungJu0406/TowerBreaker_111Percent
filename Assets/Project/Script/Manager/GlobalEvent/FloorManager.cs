@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using NSJ_Player;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using Utility;
 
@@ -62,6 +63,7 @@ public class FloorManager : MonoBehaviour
 
         Floor floor = Instantiate(_floorPrefab, new Vector3(_initPos.x, _initPos.y + y * _floorHeight, _initPos.z), Quaternion.identity);
         floor.CreateEnemy(GetFloorData(floorIndex));
+        floor.CreateChest(GetFloorData(floorIndex));
         _activeFloors[floorIndex] = floor;
     }
 
