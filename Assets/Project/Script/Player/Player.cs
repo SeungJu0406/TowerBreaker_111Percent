@@ -12,8 +12,6 @@ namespace NSJ_Player
         public float AttackPower => _attackPower;
 
         [Header("Stage Transition")]
-        // 화면 밖으로 나가는 거리 (카메라 범위 밖이 되도록 충분히 크게 설정)
-        [SerializeField] private float _offScreenDistance = 20f;
         // 화면 밖 이동 / 왼쪽 등장 각각에 걸리는 시간(초)
         [SerializeField] private float _transitionMoveDuration = 0.5f;
         [SerializeField] private Transform _rightEntryPos;

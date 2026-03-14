@@ -7,7 +7,6 @@ namespace NSJ_Player
     public class DefenceBehaviour : MonoBehaviour
     {
         [SerializeField] private Player _player;
-        [SerializeField] private KeyCode _defenceKey = KeyCode.X;
 
         [Header("Overlap")]
         [SerializeField] private Vector2 _overlapOffset = new Vector2(0.5f, 0.5f);

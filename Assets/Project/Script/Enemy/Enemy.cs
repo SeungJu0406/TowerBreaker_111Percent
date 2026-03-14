@@ -38,9 +38,14 @@ namespace NSJ_Enemy
             _neighborInfo.PrevNeighbor = prevNeighbor;
             _neighborInfo.NextNeighbor = nextNeighbor;
         }
-        public void TakeDamage(float damage)
+        public bool TryHit(Transform attacker)
         {
-            if (_canHit == false) return;
+            return true;
+        }
+
+        public float TakeDamage(Transform attacker, float damage)
+        {
+            if (_canHit == false) return 0;
 
             _hp -= damage;
 
@@ -51,6 +56,8 @@ namespace NSJ_Enemy
             {
                 Die();
             }
+
+            return damage;
         }
 
         private void Die()

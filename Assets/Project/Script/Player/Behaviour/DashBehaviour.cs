@@ -6,7 +6,6 @@ namespace NSJ_Player
     public class DashBehaviour : MonoBehaviour
     {
         [SerializeField] private Player _player;
-        [SerializeField] private KeyCode _dashKey = KeyCode.Z;
 
         [Header("Dash")]
         [SerializeField] private float _dashSpeed = 10f;

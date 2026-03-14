@@ -6,7 +6,6 @@ namespace NSJ_Player
     public class AttackBehaviour : MonoBehaviour
     {
         [SerializeField] private Player _player;
-        [SerializeField] private KeyCode _attackKey = KeyCode.C;
 
         [Header("Overlap")]
         [SerializeField] private Vector2 _overlapOffset = new Vector2(0.5f, 0.5f);
@@ -18,10 +17,15 @@ namespace NSJ_Player
         // 층 전환 중에는 공격 불가 — 플레이어가 화면 밖에 있으므로 입력을 막음
         private bool _isTransitioning = false;
 
+        private IBattle _battle;
+
         private void Awake()
         {
             if (_player == null)
+            {
                 _player = GetComponentInParent<Player>();
+                _battle = _player.GetComponent<IBattle>();
+            }
         }
 
         private void Start()
@@ -54,7 +58,8 @@ namespace NSJ_Player
                 Enemy enemy = hit.GetComponent<Enemy>();
                 if (enemy == null || !enemy.CanHit) continue;
 
-                ((IHitable)enemy).TakeDamage(_player.AttackPower);
+                // 배틀시스템으로 변경
+                _battle.AttackTarget(enemy, _player.AttackPower);
             }
         }
 
