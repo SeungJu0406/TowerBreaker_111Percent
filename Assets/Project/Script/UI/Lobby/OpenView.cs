@@ -72,6 +72,7 @@ public class OpenView : BaseView
         if (chestCount <= 0) return;
 
         // 장비 획득
+        UserDataManager.Instance.ChestCount--;
 
         // 상자 없애고 당겨오기
         RemoveChestInSlot();
@@ -102,14 +103,16 @@ public class OpenView : BaseView
         ObjectPool.Return(_chestInSlot);
         _chestInSlot = null;
 
+        if (_chestsInQueue.Count == 0) return;
+
         GameObject newChestInSlot = _chestsInQueue[_chestsInQueue.Count - 1];
         _chestInSlot = newChestInSlot;
         newChestInSlot.transform.SetParent(_openSlot);
 
         StartCoroutine(RemoveChestRoutine(
-            newChestInSlot.transform, 
-            newChestInSlot.transform.position, 
-            _openSlot.position, 
+            newChestInSlot.transform,
+            newChestInSlot.transform.position,
+            _openSlot.position,
             _chestMoveDuration));
 
         _chestsInQueue.RemoveAt(_chestsInQueue.Count - 1);
