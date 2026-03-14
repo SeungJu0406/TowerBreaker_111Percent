@@ -56,11 +56,13 @@ public class FloorManager : MonoBehaviour
 
     // 플로어 프리팹을 생성하고 적을 배치
     // 위치: index * _floorHeight → 현재 층 위로 한 칸씩 올라가는 구조
-    private void SpawnFloor(int index)
+    private void SpawnFloor(int floorIndex)
     {
-        Floor floor = Instantiate(_floorPrefab, new Vector3(_initPos.x, _initPos.y + index * _floorHeight, _initPos.z), Quaternion.identity);
-        floor.CreateEnemy(GetFloorData(index));
-        _activeFloors[index] = floor;
+        int y = floorIndex - _currentFloorIndex;
+
+        Floor floor = Instantiate(_floorPrefab, new Vector3(_initPos.x, _initPos.y + y * _floorHeight, _initPos.z), Quaternion.identity);
+        floor.CreateEnemy(GetFloorData(floorIndex));
+        _activeFloors[floorIndex] = floor;
     }
 
     // 현재 플로어의 모든 적이 죽었을 때 Floor에서 이 콜백 호출
@@ -127,8 +129,8 @@ public class FloorManager : MonoBehaviour
         _currentFloor = _activeFloors[_currentFloorIndex];
         _currentFloor.OnFloorCleared += OnCurrentFloorCleared;
 
-        CreateFloor();
         DestroyFloor();
+        CreateFloor();
 
         // [4단계] 플레이어 왼쪽에서 등장
         // 새 층이 세팅된 뒤에 플레이어가 나타나므로 적과 타이밍이 맞음

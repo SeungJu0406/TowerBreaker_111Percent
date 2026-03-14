@@ -16,7 +16,8 @@ namespace NSJ_Player
         [SerializeField] private float _offScreenDistance = 20f;
         // 화면 밖 이동 / 왼쪽 등장 각각에 걸리는 시간(초)
         [SerializeField] private float _transitionMoveDuration = 0.5f;
-
+        [SerializeField] private Transform _rightEntryPos;
+        [SerializeField] private Transform _leftEntryPos;
         public bool IsCollide => _isCollide;
         private bool _isCollide = false;
         // 전환 중 왼쪽 Boundary를 통과할 때 피격 판정이 발생하는 버그 방지용
@@ -96,7 +97,7 @@ namespace NSJ_Player
         public IEnumerator MoveOffScreenCoroutine()
         {
             Vector3 start = transform.position;
-            Vector3 target = start + Vector3.right * _offScreenDistance;
+            Vector3 target = _rightEntryPos.position;
             float elapsed = 0f;
             while (elapsed < _transitionMoveDuration)
             {
@@ -115,14 +116,14 @@ namespace NSJ_Player
 
             Vector3 target = _initialPosition.position;
             // InitialPosition 기준 왼쪽으로 _offScreenDistance 만큼 떨어진 곳에서 시작
-            Vector3 start = new Vector3(target.x - _offScreenDistance, target.y, target.z);
+            Vector3 start = _leftEntryPos.position;
             transform.position = start;
 
             float elapsed = 0f;
             while (elapsed < _transitionMoveDuration)
             {
                 elapsed += Time.deltaTime;
-                transform.position = Vector3.Lerp(start, target, elapsed / _transitionMoveDuration);
+                transform.position = Vector3.MoveTowards(start, target, elapsed / _transitionMoveDuration);
                 yield return null;
             }
             transform.position = target;
