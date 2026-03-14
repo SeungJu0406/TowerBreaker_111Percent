@@ -16,6 +16,8 @@ public class EventManager : MonoBehaviour
     // 층 전환 연출 완료 — 입력 허용 + 플레이어 초기 위치 복귀 트리거
     public event UnityAction OnStageTransitionEnd;
 
+    public event UnityAction OnGameClear;
+
     void Awake()
     {
         Manager.SetEvent(this);
@@ -52,4 +54,6 @@ public class EventManager : MonoBehaviour
     public void OnStageClearInvoke() => OnStageClear?.Invoke();
     public void OnStageTransitionStartInvoke() => OnStageTransitionStart?.Invoke();
     public void OnStageTransitionEndInvoke() => OnStageTransitionEnd?.Invoke();
+
+    public void OnGameClearInvoke() => OnGameClear?.Invoke();
 }

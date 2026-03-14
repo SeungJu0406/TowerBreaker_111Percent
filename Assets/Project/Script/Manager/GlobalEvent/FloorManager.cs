@@ -78,9 +78,8 @@ public class FloorManager : MonoBehaviour
         // 다음 인덱스가 _floorData 범위를 벗어나면 더 이상 올라갈 층이 없음
         if (_currentFloorIndex + 1 >= _floorData.Count)
         {
-            // 최종 클리어 — 전환 없이 종료
-            // 나중에 게임 클리어 연출/UI/씬 전환으로 교체 예정
-            Debug.Log("최종 클리어!");
+            // 최종 클리어
+            Manager.Event?.OnGameClearInvoke();
             return;
         }
 
