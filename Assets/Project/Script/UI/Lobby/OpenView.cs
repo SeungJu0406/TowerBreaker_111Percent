@@ -47,6 +47,7 @@ public class OpenView : BaseView
         if(_chestInSlot != null)
         {
             ObjectPool.Return(_chestInSlot);
+            _chestInSlot= null;
         }
         if(_chestsInQueue.Count > 0)
         {
