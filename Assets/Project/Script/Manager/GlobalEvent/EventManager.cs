@@ -5,6 +5,7 @@ public class EventManager : MonoBehaviour
 {
 
     public event UnityAction OnPlayerHit;
+    public event UnityAction OnPlayerDied;
     public event UnityAction OnDefenceStart;
     public event UnityAction OnDefenceEnd;
 
@@ -31,6 +32,11 @@ public class EventManager : MonoBehaviour
     public void OnPlayerHitInvoke()
     {
         OnPlayerHit?.Invoke();
+    }
+
+    public void OnPlayerDiedInvoke()
+    {
+        OnPlayerDied?.Invoke();
     }
 
     public void OnDefenceStartInvoke()

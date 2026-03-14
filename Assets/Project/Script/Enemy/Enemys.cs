@@ -28,7 +28,7 @@ namespace NSJ_Enemy
         // 층이 생성된 직후에는 아직 "플레이 중"이 아님
         // Floor.StartFloor() → Resume()이 호출될 때 비로소 이동 시작
         // 덕분에 전환 연출 중 적이 움직이지 않음
-        [SerializeField]private bool _canMove = false;
+        [SerializeField] private bool _canMove = false;
 
         // 사망한 적 수 카운터 (전원 사망 감지용)
         private int _deadCount = 0;
@@ -51,12 +51,16 @@ namespace NSJ_Enemy
             InitEnemys();
 
             Manager.Event.OnPlayerHit += HitPlayerAfter;
+            Manager.Event.OnPlayerDied += DiedPlayerAfter;
         }
 
         private void OnDestroy()
         {
             if (Manager.Event != null)
+            {
                 Manager.Event.OnPlayerHit -= HitPlayerAfter;
+                Manager.Event.OnPlayerDied -= DiedPlayerAfter;
+            }
         }
 
         private void Update()
@@ -147,7 +151,10 @@ namespace NSJ_Enemy
         {
             Stop();
         }
-
+        private void DiedPlayerAfter()
+        {
+            Stop();
+        }
 
         private void Stop()
         {

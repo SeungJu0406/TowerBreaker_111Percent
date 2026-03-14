@@ -16,10 +16,14 @@ namespace NSJ_Player
         // 층 전환 중에는 대쉬 불가 — 화면 밖 이동 중 대쉬하면 위치가 엇나갈 수 있음
         private bool _isTransitioning = false;
 
+
         private void Awake()
         {
             if (_player == null)
+            {
                 _player = GetComponentInParent<Player>();
+            }
+
         }
 
         private void Start()
@@ -45,19 +49,11 @@ namespace NSJ_Player
         private void OnTransitionStart() => _isTransitioning = true;
         private void OnTransitionEnd() => _isTransitioning = false;
 
-        private void Update()
+
+        public void Dash()
         {
             // _isTransitioning: 층 전환 연출 중에는 입력 차단
             if (_canDash == false || _isDefending || _isTransitioning) return;
-
-            if (Input.GetKeyDown(_dashKey))
-            {
-                Dash();
-            }
-        }
-
-        private void Dash()
-        {
             StartCoroutine(DashRoutine());
         }
 
@@ -72,7 +68,6 @@ namespace NSJ_Player
                 _player.transform.Translate(Vector2.right * _dashSpeed * Time.deltaTime);
                 yield return null;
             }
-
             // 대쉬 중지
             _canDash = true;
         }

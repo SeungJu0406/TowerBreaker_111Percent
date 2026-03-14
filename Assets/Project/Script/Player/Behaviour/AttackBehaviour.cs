@@ -41,18 +41,11 @@ namespace NSJ_Player
         private void OnTransitionStart() => _isTransitioning = true;
         private void OnTransitionEnd() => _isTransitioning = false;
 
-        private void Update()
+        public void Attack()
         {
             // _isTransitioning: 층 전환 연출 중에는 입력 차단
             if (_canAttack == false || _isTransitioning) return;
 
-            if (Input.GetKeyDown(_attackKey))
-            {
-                Attack();
-            }
-        }
-        private void Attack()
-        {
             Vector2 center = (Vector2)transform.position + _overlapOffset;
             Collider2D[] hits = Physics2D.OverlapBoxAll(center, _overlapSize, 0f, _enemyLayer);
 

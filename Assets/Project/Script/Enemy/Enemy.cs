@@ -25,7 +25,10 @@ namespace NSJ_Enemy
 
         public Enemy PrevNeighbor => _neighborInfo.PrevNeighbor;
         public Enemy NextNeighbor => _neighborInfo.NextNeighbor;
-        [SerializeField] private NeighborInfo _neighborInfo;  
+        [SerializeField] private NeighborInfo _neighborInfo;
+
+        // 해골 프리팹
+        [SerializeField] private SkullObject _skullPrefab;
 
         public event UnityAction OnDie;
 
@@ -55,6 +58,11 @@ namespace NSJ_Enemy
             // 죽는 로직
             _canHit = false;
             _neighborInfo.NextNeighbor?.SetCanHit(true);
+
+            Transform root = transform.root;
+            SkullObject skull = Instantiate(_skullPrefab, root);
+            skull.transform.position = transform.position;
+
 
             // 죽는 이펙트
 

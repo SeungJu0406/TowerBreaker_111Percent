@@ -23,46 +23,12 @@ namespace NSJ_Player
         public bool IsTransitioning => _isTransitioning;
         private bool _isTransitioning = false;
 
-        // FloorManager가 yield return으로 대기하며 순서를 제어하므로
-        // Player는 이벤트를 직접 구독하지 않음 — 이동 코루틴만 public으로 제공
 
-        // [전환 1단계] 오른쪽 화면 밖으로 이동
-        // FloorManager에서 yield return StartCoroutine(_player.MoveOffScreenCoroutine()) 로 호출
-        public IEnumerator MoveOffScreenCoroutine()
+        private Rigidbody2D _rb;
+
+        void Awake()
         {
-            Vector3 start = transform.position;
-            Vector3 target = start + Vector3.right * _offScreenDistance;
-            float elapsed = 0f;
-            while (elapsed < _transitionMoveDuration)
-            {
-                elapsed += Time.deltaTime;
-                transform.position = Vector3.Lerp(start, target, elapsed / _transitionMoveDuration);
-                yield return null;
-            }
-        }
-
-        // [전환 3단계] 왼쪽 화면 밖에서 InitialPosition으로 등장
-        // 플로어 하강이 완료된 뒤 호출 → 새 층에 플레이어가 나타나는 연출
-        public IEnumerator MoveFromLeftCoroutine()
-        {
-            // 이동 중 왼쪽 Boundary 트리거를 통과하므로 피격 판정 무시
-            _isTransitioning = true;
-
-            Vector3 target = _initialPosition.position;
-            // InitialPosition 기준 왼쪽으로 _offScreenDistance 만큼 떨어진 곳에서 시작
-            Vector3 start = new Vector3(target.x - _offScreenDistance, target.y, target.z);
-            transform.position = start;
-
-            float elapsed = 0f;
-            while (elapsed < _transitionMoveDuration)
-            {
-                elapsed += Time.deltaTime;
-                transform.position = Vector3.Lerp(start, target, elapsed / _transitionMoveDuration);
-                yield return null;
-            }
-            transform.position = target;
-
-            _isTransitioning = false;
+            _rb = GetComponent<Rigidbody2D>();
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
@@ -106,10 +72,6 @@ namespace NSJ_Player
             if (_health <= 0)
             {
                 Die();
-
-                // 임시로 사용, 나중에 Die 이벤트로 변경
-                Manager.Event?.OnPlayerHitInvoke();
-
                 return;
             }
 
@@ -121,9 +83,53 @@ namespace NSJ_Player
 
         private void Die()
         {
-            Debug.Log("죽음");
+            Manager.Event?.OnPlayerDiedInvoke();
+
+            gameObject.SetActive(false);
         }
 
+        // FloorManager가 yield return으로 대기하며 순서를 제어하므로
+        // Player는 이벤트를 직접 구독하지 않음 — 이동 코루틴만 public으로 제공
 
+        // [전환 1단계] 오른쪽 화면 밖으로 이동
+        // FloorManager에서 yield return StartCoroutine(_player.MoveOffScreenCoroutine()) 로 호출
+        public IEnumerator MoveOffScreenCoroutine()
+        {
+            Vector3 start = transform.position;
+            Vector3 target = start + Vector3.right * _offScreenDistance;
+            float elapsed = 0f;
+            while (elapsed < _transitionMoveDuration)
+            {
+                elapsed += Time.deltaTime;
+                transform.position = Vector3.Lerp(start, target, elapsed / _transitionMoveDuration);
+                yield return null;
+            }
+        }
+
+        // [전환 3단계] 왼쪽 화면 밖에서 InitialPosition으로 등장
+        // 플로어 하강이 완료된 뒤 호출 → 새 층에 플레이어가 나타나는 연출
+        public IEnumerator MoveFromLeftCoroutine()
+        {
+            // 이동 중 왼쪽 Boundary 트리거를 통과하므로 피격 판정 무시
+            _isTransitioning = true;
+
+            Vector3 target = _initialPosition.position;
+            // InitialPosition 기준 왼쪽으로 _offScreenDistance 만큼 떨어진 곳에서 시작
+            Vector3 start = new Vector3(target.x - _offScreenDistance, target.y, target.z);
+            transform.position = start;
+
+            float elapsed = 0f;
+            while (elapsed < _transitionMoveDuration)
+            {
+                elapsed += Time.deltaTime;
+                transform.position = Vector3.Lerp(start, target, elapsed / _transitionMoveDuration);
+                yield return null;
+            }
+            transform.position = target;
+
+            _rb.linearVelocity = Vector3.zero;
+
+            _isTransitioning = false;
+        }
     }
 }
