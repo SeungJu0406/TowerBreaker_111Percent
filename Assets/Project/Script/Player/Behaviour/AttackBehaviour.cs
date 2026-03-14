@@ -60,6 +60,10 @@ namespace NSJ_Player
 
                 // 배틀시스템으로 변경
                 _battle.AttackTarget(enemy, _player.AttackPower);
+                // 한 번의 공격으로 적 하나만 처리
+                // 이유: TakeDamage → Die() → NextNeighbor.SetCanHit(true) 가 같은 프레임에 실행되므로
+                // break 없이 계속 루프하면 방금 활성화된 뒤 적까지 동일 공격에 피격됨
+                break;
             }
         }
 
