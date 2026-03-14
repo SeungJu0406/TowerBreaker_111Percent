@@ -18,6 +18,9 @@ public class SkullObject : MonoBehaviour
 
         Throw(direction, throwForce);
         GetSkullPoint();
+
+        // 씬에 계속 쌓이지 않도록 일정 시간 후 자동 삭제
+        Destroy(gameObject, 3f);
     }
 
     public void Throw(Vector2 direction, float force)

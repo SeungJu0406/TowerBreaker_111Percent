@@ -79,8 +79,10 @@ namespace NSJ_Enemy
         }
 
         // Floor.StartFloor()에서 호출 → 층 시작 시 이동 허용
+        // _deadCount 리셋: 같은 인스턴스가 재사용될 경우 이전 카운트가 남아 오작동 방지
         public void Resume()
         {
+            _deadCount = 0;
             _canMove = true;
         }
 

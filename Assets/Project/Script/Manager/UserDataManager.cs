@@ -7,7 +7,7 @@ public class UserDataManager : SingleTon<UserDataManager>
 {
     public UserData UserData { get; private set; } = new UserData();
 
-    public int SkullCount { get => UserData.SkullCound; set { UserData.SkullCound = value; OnSkullCountChanged?.Invoke(value); } }
+    public int SkullCount { get => UserData.SkullCount; set { UserData.SkullCount = value; OnSkullCountChanged?.Invoke(value); } }
     public int ChestCount { get => UserData.ChestCount; set { UserData.ChestCount = value; OnChestCountChanged?.Invoke(value); } }
 
     public event UnityAction<int> OnSkullCountChanged;
@@ -24,7 +24,7 @@ public class UserDataManager : SingleTon<UserDataManager>
 public class UserData
 {
     // 해골(돈) 개수
-    public int SkullCound;
+    public int SkullCount;
     // 오픈 가능한 상자 개수
     public int ChestCount;
 }
