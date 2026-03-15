@@ -3631,9 +3631,6 @@ MonoBehaviour:
   _player: {fileID: 0}
   _overlapOffset: {x: 0.5, y: 0.5}
   _overlapSize: {x: 0.5, y: 1}
-  _enemyLayer:
-    serializedVersion: 2
-    m_Bits: 64
   _chestLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -3652,9 +3649,6 @@ MonoBehaviour:
   _player: {fileID: 0}
   _overlapOffset: {x: 0.5, y: 0.5}
   _overlapSize: {x: 0.5, y: 1}
-  _enemyLayer:
-    serializedVersion: 2
-    m_Bits: 64
   _knockBackForce: 2
   _moveBackDuration: 0.5
 --- !u!114 &1824772486
