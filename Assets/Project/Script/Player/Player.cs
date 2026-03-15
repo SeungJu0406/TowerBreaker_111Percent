@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace NSJ_Player
 {
@@ -8,6 +9,8 @@ namespace NSJ_Player
         public Transform InitialPosition => _initialPosition;
         [SerializeField] private Transform _initialPosition;
         [SerializeField] private int _health = 3;
+        public int Health { get => _health; set {  _health = value; OnHealthChange?.Invoke(value); }   }
+        public event UnityAction<int> OnHealthChange;
 
         public float AttackPower {
             get
@@ -95,9 +98,9 @@ namespace NSJ_Player
             // 데미지 판정
             if( _isTransitioning) return;
 
-            _health--;
+            Health--;
 
-            if (_health <= 0)
+            if (Health <= 0)
             {
                 Die();
                 return;
