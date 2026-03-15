@@ -16,6 +16,8 @@ namespace NSJ_Player
         [SerializeField] private float _knockBackForce = 5f;
         [SerializeField] private float _moveBackDuration = 0.5f;
 
+        [Header("경직")]
+        [SerializeField] private float _hitStopDuration = 0.3f;
 
         private bool _canDefend = true;
         // 층 전환 중에는 방어 불가 — 화면 밖에 있는 상태에서 방어가 작동하면 위치 복귀 로직이 충돌함
@@ -63,6 +65,7 @@ namespace NSJ_Player
             }
 
 
+            HitStop.Instance.Do(_hitStopDuration);
         }
 
 

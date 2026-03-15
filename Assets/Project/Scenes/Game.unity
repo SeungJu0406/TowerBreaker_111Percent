@@ -4554,6 +4554,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 8968818836151599254, guid: 48cb7e5fb89abab48ab57b8f35ef7fec, type: 3}
+      propertyPath: _hitStopDuration
+      value: 0.05
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
