@@ -7,12 +7,10 @@ namespace NSJ_Player
     public class DefenceBehaviour : MonoBehaviour
     {
         [SerializeField] private Player _player;
-        [SerializeField] private KeyCode _defenceKey = KeyCode.X;
 
         [Header("Overlap")]
         [SerializeField] private Vector2 _overlapOffset = new Vector2(0.5f, 0.5f);
         [SerializeField] private Vector2 _overlapSize = new Vector2(0.5f, 1f);
-        [SerializeField] private LayerMask _enemyLayer;
 
         [Header("KnockBack")]
         [SerializeField] private float _knockBackForce = 5f;
@@ -20,6 +18,8 @@ namespace NSJ_Player
 
 
         private bool _canDefend = true;
+        // 층 전환 중에는 방어 불가 — 화면 밖에 있는 상태에서 방어가 작동하면 위치 복귀 로직이 충돌함
+        private bool _isTransitioning = false;
 
         private void Awake()
         {
@@ -27,20 +27,30 @@ namespace NSJ_Player
                 _player = GetComponentInParent<Player>();
         }
 
-        private void Update()
+        private void Start()
         {
-            if (_canDefend == false) return;
-
-            if (Input.GetKeyDown(_defenceKey))
-            {
-                Defence();
-            }
+            if (Manager.Event == null) return;
+            Manager.Event.OnStageTransitionStart += OnTransitionStart;
+            Manager.Event.OnStageTransitionEnd += OnTransitionEnd;
         }
 
-        private void Defence()
+        private void OnDestroy()
         {
+            if (Manager.Event == null) return;
+            Manager.Event.OnStageTransitionStart -= OnTransitionStart;
+            Manager.Event.OnStageTransitionEnd -= OnTransitionEnd;
+        }
+
+        private void OnTransitionStart() => _isTransitioning = true;
+        private void OnTransitionEnd() => _isTransitioning = false;
+
+
+        public void Defence()
+        {
+            // _isTransitioning: 층 전환 연출 중에는 입력 차단
+            if (_canDefend == false || _isTransitioning) return;
             Vector2 center = (Vector2)transform.position + _overlapOffset;
-            Collider2D[] hits = Physics2D.OverlapBoxAll(center, _overlapSize, 0f, _enemyLayer);
+            Collider2D[] hits = Physics2D.OverlapBoxAll(center, _overlapSize, 0f, Layer.EnemyGroup);
 
             foreach (Collider2D hit in hits)
             {
@@ -50,7 +60,6 @@ namespace NSJ_Player
                 Enemys enemys = enemy.GetComponentInParent<Enemys>();
                 enemys?.KnockBack(_knockBackForce, _moveBackDuration);
                 MoveBack();
-                break;
             }
 
 

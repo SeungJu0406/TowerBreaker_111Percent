@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4850ac011ef68d4fbe62fa213ab16e3, type: 3}
+  m_Name: 5F
+  m_EditorClassIdentifier: 
+  FloorNumber: 4
+  EnemysGroup:
+  - GroupName: Normal
+    Enemies:
+    - {fileID: 5932213895478614782, guid: ae0d764c6deb4ec4d9a4f300b1c630dc, type: 3}
+    - {fileID: 5932213895478614782, guid: 4b3b7046759634f4181e98ba8c9763b1, type: 3}
+    - {fileID: 5932213895478614782, guid: ae0d764c6deb4ec4d9a4f300b1c630dc, type: 3}
+    - {fileID: 5932213895478614782, guid: 4b3b7046759634f4181e98ba8c9763b1, type: 3}
+    - {fileID: 5932213895478614782, guid: 4b3b7046759634f4181e98ba8c9763b1, type: 3}
+    EnemysSpeed: 1
+    EnemyInterval: 0.4
+  - GroupName: Boss
+    Enemies:
+    - {fileID: 5932213895478614782, guid: c49ddcad1b906c546b441c7691d48c82, type: 3}
+    - {fileID: 5932213895478614782, guid: c49ddcad1b906c546b441c7691d48c82, type: 3}
+    EnemysSpeed: 0.5
+    EnemyInterval: 1.5
+  FloorMultiplier: 1
+  IsExistChest: 1

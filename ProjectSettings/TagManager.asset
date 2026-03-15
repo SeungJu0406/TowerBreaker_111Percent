@@ -6,18 +6,20 @@ TagManager:
   tags:
   - Enemy
   - Boundary
+  - Chest
+  - Boss
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - Enemy
-  - 
-  - 
-  - 
-  - 
+  - NotCollidePlayer
+  - Chest
+  - Boss
+  - IgnoreCollide
   - 
   - 
   - 
@@ -40,6 +42,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: BackGround
+    uniqueID: 2489386497
+    locked: 0
+  - name: Chest
+    uniqueID: 2731571273
+    locked: 0
+  - name: Boss
+    uniqueID: 1454122747
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
