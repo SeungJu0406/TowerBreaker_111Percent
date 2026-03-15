@@ -14,5 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: weapon3
   Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
-  BasicDamage: 4
-  Reinforced: 2
+  BasicDamage: 3

@@ -32,7 +32,17 @@ namespace NSJ_Enemy
 
         public event UnityAction OnDie;
 
-        public void SetCanHit(bool canHit) => _canHit = canHit;
+        private bool _isReserveCanHitTrue;
+        private void LateUpdate()
+        {
+            if (_isReserveCanHitTrue)
+            {
+                _canHit = true;
+                _isReserveCanHitTrue = false;
+            }
+            
+        }
+        public void SetCanHit(bool canHit) => _isReserveCanHitTrue = canHit;
         public void SetNeighbor(Enemy prevNeighbor, Enemy nextNeighbor)
         {
             _neighborInfo.PrevNeighbor = prevNeighbor;
@@ -90,7 +100,7 @@ namespace NSJ_Enemy
         Color _originColor;
         void Awake()
         {
-            _renderer = GetComponent<SpriteRenderer>();
+            _renderer = GetComponentInChildren<SpriteRenderer>();
             _originColor = _renderer.color;
 
         }

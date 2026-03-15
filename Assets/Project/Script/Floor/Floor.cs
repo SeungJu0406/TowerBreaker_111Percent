@@ -93,6 +93,9 @@ public class Floor : MonoBehaviour
         {
             List<Enemy> enemies = enemyGroup.Enemies;
             Enemys newEnemys = Instantiate(_enemysPrefab, transform);
+
+            newEnemys.SetMoveSpeed(enemyGroup.EnemysSpeed);
+
             enemysGroup.Add(newEnemys);
             // 위치 설정
             newEnemys.transform.position = _InitialEnemyPos.position;

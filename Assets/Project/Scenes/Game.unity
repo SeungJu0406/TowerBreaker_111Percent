@@ -1601,9 +1601,9 @@ MonoBehaviour:
   _floorData:
   - {fileID: 11400000, guid: c31907fe30ed68548b93cb8b3fd087d0, type: 2}
   - {fileID: 11400000, guid: 3b1158c9bb37c7f4abc93ef99524fe71, type: 2}
+  - {fileID: 11400000, guid: eb63bb4097a2af84fbb3128149a7b9dd, type: 2}
   - {fileID: 11400000, guid: c31907fe30ed68548b93cb8b3fd087d0, type: 2}
-  - {fileID: 11400000, guid: 3b1158c9bb37c7f4abc93ef99524fe71, type: 2}
-  - {fileID: 11400000, guid: c31907fe30ed68548b93cb8b3fd087d0, type: 2}
+  - {fileID: 11400000, guid: eb63bb4097a2af84fbb3128149a7b9dd, type: 2}
   _floorPrefab: {fileID: 5343763608289657873, guid: 23325229042749b4798587029c52d22a, type: 3}
   _player: {fileID: 0}
   _initPos: {x: 0, y: -3, z: 0}
@@ -2279,7 +2279,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 00000000010661944978d0a2
+  m_ApplyToSortingLayers: 00000000010661944978d0a2fb26ac56
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0

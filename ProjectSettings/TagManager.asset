@@ -17,7 +17,7 @@ TagManager:
   - Enemy
   - NotCollidePlayer
   - Chest
-  - 
+  - Boss
   - 
   - 
   - 
@@ -46,6 +46,9 @@ TagManager:
     locked: 0
   - name: Chest
     uniqueID: 2731571273
+    locked: 0
+  - name: Boss
+    uniqueID: 1454122747
     locked: 0
   - name: Default
     uniqueID: 0

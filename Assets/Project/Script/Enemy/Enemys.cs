@@ -187,7 +187,7 @@ namespace NSJ_Enemy
             SetMoveSpeed(saveMoveSpeed);
         }
 
-        private void SetMoveSpeed(float moveSpeed)
+        public void SetMoveSpeed(float moveSpeed)
         {
             _moveSpeed = moveSpeed;
             _rb.bodyType = _moveSpeed > 0 ? RigidbodyType2D.Kinematic : RigidbodyType2D.Dynamic;

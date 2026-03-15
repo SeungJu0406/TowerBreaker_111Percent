@@ -17,4 +17,5 @@ public class EnemyGroup
 {
     public string GroupName;
     public List<Enemy> Enemies;
+    public float EnemysSpeed;
 }
