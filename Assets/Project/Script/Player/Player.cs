@@ -100,6 +100,8 @@ namespace NSJ_Player
 
             Health--;
 
+            HitStop.Instance.Do(0.1f);
+
             if (Health <= 0)
             {
                 Die();

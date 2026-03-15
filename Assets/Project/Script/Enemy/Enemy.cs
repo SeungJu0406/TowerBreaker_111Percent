@@ -72,6 +72,8 @@ namespace NSJ_Enemy
 
         private void Die()
         {
+            HitStop.Instance.Do(0.08f);
+
             // 죽는 로직
             _canHit = false;
             _neighborInfo.NextNeighbor?.SetCanHit(true);
