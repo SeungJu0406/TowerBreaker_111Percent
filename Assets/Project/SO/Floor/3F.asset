@@ -20,9 +20,11 @@ MonoBehaviour:
     - {fileID: 5932213895478614782, guid: ae0d764c6deb4ec4d9a4f300b1c630dc, type: 3}
     - {fileID: 5932213895478614782, guid: ae0d764c6deb4ec4d9a4f300b1c630dc, type: 3}
     EnemysSpeed: 1
+    EnemyInterval: 0.4
   - GroupName: Boss
     Enemies:
     - {fileID: 5932213895478614782, guid: c49ddcad1b906c546b441c7691d48c82, type: 3}
     EnemysSpeed: 0.5
+    EnemyInterval: 1.5
   FloorMultiplier: 1
   IsExistChest: 1

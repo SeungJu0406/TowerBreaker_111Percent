@@ -99,6 +99,7 @@ public class Floor : MonoBehaviour
             Enemys newEnemys = Instantiate(_enemysPrefab, transform);
 
             newEnemys.SetMoveSpeed(enemyGroup.EnemysSpeed);
+            newEnemys.IntervalDistance = enemyGroup.EnemyInterval;
 
             enemysGroup.Add(newEnemys);
             // 위치 설정 — viewport 기반 X로 오른쪽 화면 끝 기준 스폰

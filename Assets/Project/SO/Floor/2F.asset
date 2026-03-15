@@ -22,5 +22,6 @@ MonoBehaviour:
     - {fileID: 5932213895478614782, guid: 4b3b7046759634f4181e98ba8c9763b1, type: 3}
     - {fileID: 5932213895478614782, guid: ae0d764c6deb4ec4d9a4f300b1c630dc, type: 3}
     EnemysSpeed: 1
+    EnemyInterval: 0.4
   FloorMultiplier: 1
   IsExistChest: 0

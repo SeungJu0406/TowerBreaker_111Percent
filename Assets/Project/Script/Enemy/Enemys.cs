@@ -1,6 +1,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Events;
 using Utility;
@@ -19,6 +20,7 @@ namespace NSJ_Enemy
 
         [SerializeField] private Direction _direction;
         [SerializeField] private float _moveSpeed;
+        public float IntervalDistance {  get => _intervalDistance; set { _intervalDistance = value; }}
         [SerializeField] private float _intervalDistance;
 
         // Floor가 구독 → 이 그룹의 적이 전원 사망하면 클리어 카운트 증가

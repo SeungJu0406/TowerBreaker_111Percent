@@ -61,6 +61,8 @@ public class EquipView : BaseView
 
     private void OnEnable()
     {
+
+        // 인벤토리 표시
         List<Equipment> equipments = UserDataManager.Instance.Equipments;
 
         for (int i = 0; i < equipments.Count; i++)
@@ -75,6 +77,10 @@ public class EquipView : BaseView
         }
 
         _popupInfo.SetActive(false);
+
+        // 현재 장비 표시
+        SetCurEquip(UserDataManager.Instance.CurEquipment);
+
     }
 
     private void OnDisable()
@@ -103,9 +109,7 @@ public class EquipView : BaseView
         // 실제 유저 데이터 장비에 입력
 
         // UI 설정
-        _curImage.sprite = equipment.Data.Sprite;
-        _curName.text = equipment.Data.Name;
-        _curDamage.text =$"Damage : {equipment.Data.BasicDamage}";
+        SetCurEquip(equipment);
 
 
         // 리스트에서 제거
@@ -118,5 +122,14 @@ public class EquipView : BaseView
 
 
         _popupInfo.SetActive(false);
+    }
+
+    private void SetCurEquip(Equipment equipment)
+    {
+        if (equipment == null || equipment.Data == null) return;
+
+        _curImage.sprite = equipment.Data.Sprite;
+        _curName.text = equipment.Data.Name;
+        _curDamage.text = $"Damage : {equipment.Data.BasicDamage}";
     }
 }
