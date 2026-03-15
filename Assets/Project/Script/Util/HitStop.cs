@@ -12,6 +12,12 @@ public class HitStop : SingleTon<HitStop>
         StartCoroutine(HitStopRoutine(duration, shakeStrength));
     }
 
+    public void Do(GameObject canvas, float duration, float shakeStrength = 0.1f)
+    {
+        StopAllCoroutines();
+        StartCoroutine(HitStopUIRoutine(canvas,duration, shakeStrength));
+    }
+
     private IEnumerator HitStopRoutine(float duration, float shakeStrength)
     {
         Time.timeScale = 0f;
@@ -31,6 +37,27 @@ public class HitStop : SingleTon<HitStop>
         }
 
         cam.transform.position = originalPos;
+        Time.timeScale = 1f;
+    }
+
+    private IEnumerator HitStopUIRoutine(GameObject canvas, float duration,  float shakeStrength)
+    {
+        Time.timeScale = 0f;
+
+        Vector3 originalPos = canvas.transform.position;
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            float t = elapsed / duration;
+            float strength = shakeStrength * (1f - t);
+            canvas.transform.position = originalPos + (Vector3)(Random.insideUnitCircle * strength);
+
+            elapsed += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        canvas.transform.position = originalPos;
         Time.timeScale = 1f;
     }
 }

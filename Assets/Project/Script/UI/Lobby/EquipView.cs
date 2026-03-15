@@ -8,6 +8,9 @@ public class EquipView : BaseView
 {
     [SerializeField] private EquipSlot _slotPrefab;
 
+    [Header("경직")]
+    [SerializeField] private float _hitStopDuration = 0.08f;
+
     private List<EquipSlot> _slots = new List<EquipSlot>();
 
     private Image _curImage;
@@ -117,6 +120,9 @@ public class EquipView : BaseView
 
 
         _popupInfo.SetActive(false);
+
+        // 역경직
+        HitStop.Instance.Do(Canvas.gameObject,_hitStopDuration);
     }
 
     private void SetCurEquip(Equipment equipment)

@@ -10,6 +10,9 @@ public class OpenView : BaseView
     [SerializeField] private GetEquipView _getEquip;
     [SerializeField] private GameObject _chestPrefab;
     [SerializeField] private float _chestMoveDuration=0.3f;
+
+    [Header("경직")]
+    [SerializeField] private float _hitStopDuration = 0.08f;
     private Button _openButton;
     private Transform _openSlot;
     private Transform _openQueue;
@@ -84,6 +87,9 @@ public class OpenView : BaseView
 
         // 상자 없애고 당겨오기
         RemoveChestInSlot();
+
+        // 역경직
+        HitStop.Instance.Do(Canvas.gameObject, _hitStopDuration);
     }
 
     private void CreateChestImage()
