@@ -85,12 +85,7 @@ public class EquipView : BaseView
 
     private void OnDisable()
     {
-        for (int i = _slots.Count - 1; i >= 0; i--)
-        {
-            Destroy(_slots[i]);
-        }
-
-        _slots.Clear();
+        ResetInventory();
     }
 
     private void ShowInfoPopup(EquipSlot slot)
@@ -131,5 +126,15 @@ public class EquipView : BaseView
         _curImage.sprite = equipment.Data.Sprite;
         _curName.text = equipment.Data.Name;
         _curDamage.text = $"Damage : {equipment.Data.BasicDamage}";
+    }
+
+    private void ResetInventory()
+    {
+        for (int i = _slots.Count - 1; i >= 0; i--)
+        {
+            Destroy(_slots[i].gameObject);
+        }
+
+        _slots.Clear();
     }
 }

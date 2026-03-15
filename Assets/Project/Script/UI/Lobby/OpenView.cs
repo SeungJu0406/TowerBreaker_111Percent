@@ -31,7 +31,7 @@ public class OpenView : BaseView
 
     protected override void InitStart()
     {
-       
+    
     }
 
     private void OnEnable()
@@ -45,16 +45,21 @@ public class OpenView : BaseView
 
     private void OnDisable()
     {
-        if(_chestInSlot != null)
+        ResetChest();
+    }
+
+    private void ResetChest()
+    {
+        if (_chestInSlot != null)
         {
             ObjectPool.Return(_chestInSlot);
-            _chestInSlot= null;
+            _chestInSlot = null;
         }
-        if(_chestsInQueue.Count > 0)
+        if (_chestsInQueue.Count > 0)
         {
             for (int i = 0; i < _chestsInQueue.Count; i++)
             {
-                ObjectPool.Return( _chestsInQueue[i]);
+                ObjectPool.Return(_chestsInQueue[i]);
             }
             _chestsInQueue.Clear();
         }

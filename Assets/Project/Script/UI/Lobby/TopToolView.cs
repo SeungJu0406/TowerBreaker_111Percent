@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class TopToolView : BaseView
 {
+    public Button ExitButton => _exitButton;
     private Button _exitButton;
     protected override void InitAwake()
     {
