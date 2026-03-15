@@ -60,7 +60,6 @@ namespace NSJ_Player
                 Enemys enemys = enemy.GetComponentInParent<Enemys>();
                 enemys?.KnockBack(_knockBackForce, _moveBackDuration);
                 MoveBack();
-                break;
             }
 
 
