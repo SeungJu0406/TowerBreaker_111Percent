@@ -34,6 +34,7 @@ namespace NSJ_Player
         private bool _isTransitioning = false;
 
 
+        public Rigidbody2D Rb => _rb;
         private Rigidbody2D _rb;
 
         void Awake()
@@ -44,7 +45,8 @@ namespace NSJ_Player
         private void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.gameObject.CompareTag(Tag.Enemy) ||
-                collision.gameObject.CompareTag(Tag.Chest))
+                collision.gameObject.CompareTag(Tag.Chest) ||
+                collision.gameObject.CompareTag(Tag.Boss))
             {
                 // Chest도 대쉬를 막는 실제 물리 오브젝트 — 상자 앞에서 대쉬 정지
                 _isCollide = true;
@@ -53,7 +55,8 @@ namespace NSJ_Player
         private void OnCollisionExit2D(Collision2D collision)
         {
             if (collision.gameObject.CompareTag(Tag.Enemy) ||
-                collision.gameObject.CompareTag(Tag.Chest))
+                collision.gameObject.CompareTag(Tag.Chest) ||
+                collision.gameObject.CompareTag(Tag.Boss))
             {
                 _isCollide = false;
             }
