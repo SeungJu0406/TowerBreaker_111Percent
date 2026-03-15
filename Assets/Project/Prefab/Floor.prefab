@@ -52,6 +52,8 @@ MonoBehaviour:
   _InitialEnemyPos: {fileID: 342032105926501445}
   _chestObjectPrefab: {fileID: 6423254682414977070, guid: 97c8deec772e5274a98e942d9db463a3, type: 3}
   _chestPos: {fileID: 5511524779655660236}
+  _enemyStartViewportX: 0.9
+  _chestStartViewPortX: 0.8
 --- !u!1 &5688102997776433396
 GameObject:
   m_ObjectHideFlags: 0

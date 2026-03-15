@@ -2239,6 +2239,9 @@ MonoBehaviour:
   _initialPosition: {fileID: 296436162}
   _health: 3
   _attackPower: 3
+  _initViewportX: 0.05
+  _leftEntryViewportX: -0.15
+  _rightExitViewportX: 1.15
   _transitionMoveDuration: 1
   _rightEntryPos: {fileID: 1006362039}
   _leftEntryPos: {fileID: 408329064}
@@ -3664,7 +3667,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 0}
-  _dashSpeed: 15
+  _dashSpeed: 10
 --- !u!1 &1826649451
 GameObject:
   m_ObjectHideFlags: 0

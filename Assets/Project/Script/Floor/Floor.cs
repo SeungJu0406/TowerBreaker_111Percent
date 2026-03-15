@@ -17,7 +17,8 @@ public class Floor : MonoBehaviour
     [SerializeField] private Transform _chestPos;
 
     [Header("Screen Positions")]
-    [SerializeField] private float _enemyStartViewportX = 1.1f;
+    [SerializeField] private float _enemyStartViewportX = 0.9f;
+    [SerializeField] private float _chestStartViewPortX = 0.7f;
     private ChestObject _chest;
     
     // FloorManager가 구독 → 이 층의 모든 조건(적 + 상자)이 충족되면 전환 시작
@@ -103,7 +104,9 @@ public class Floor : MonoBehaviour
             // 위치 설정 — viewport 기반 X로 오른쪽 화면 끝 기준 스폰
             float depth  = Mathf.Abs(Camera.main.transform.position.z);
             float spawnX = Camera.main.ViewportToWorldPoint(new Vector3(_enemyStartViewportX, 0f, depth)).x;
-            newEnemys.transform.position = new Vector3(spawnX, _InitialEnemyPos.position.y, 0f);
+            _InitialEnemyPos.position = new Vector3(spawnX, _InitialEnemyPos.position.y, _InitialEnemyPos.position.z);
+
+            newEnemys.transform.position = _InitialEnemyPos.position;
             for (int i = 0; i < enemies.Count; i++)
             {
                 // 적 생성 로직
@@ -121,6 +124,11 @@ public class Floor : MonoBehaviour
     {
         if (floorData.IsExistChest)
         {
+            float depth = Mathf.Abs(Camera.main.transform.position.z);
+            float spawnX = Camera.main.ViewportToWorldPoint(new Vector3(_chestStartViewPortX, 0f, depth)).x;
+            _chestPos.position = new Vector3(spawnX, _chestPos.position.y, _chestPos.position.z);
+
+
             _chest = Instantiate(_chestObjectPrefab, transform);
             _chest.transform.position = _chestPos.position;
         }
