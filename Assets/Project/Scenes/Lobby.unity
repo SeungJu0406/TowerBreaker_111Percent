@@ -223,8 +223,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Group: {fileID: 0}
   IsAllwaysActive: 0
-  _topToolView: {fileID: 92664476}
   _slotPrefab: {fileID: 3548022842358162623, guid: cb5ed57d697f4314dab1d5d87a50a5ce, type: 3}
+  _hitStopDuration: 0.08
 --- !u!1 &80617618
 GameObject:
   m_ObjectHideFlags: 0
@@ -2840,10 +2840,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Group: {fileID: 0}
   IsAllwaysActive: 0
-  _topToolView: {fileID: 195050087}
   _getEquip: {fileID: 1391979444}
   _chestPrefab: {fileID: 1886725577423002840, guid: 35aa47fc6523a1b4494d8e9c9fb63f68, type: 3}
   _chestMoveDuration: 0.1
+  _hitStopDuration: 0.08
 --- !u!1 &914711689
 GameObject:
   m_ObjectHideFlags: 0

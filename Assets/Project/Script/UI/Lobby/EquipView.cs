@@ -122,7 +122,7 @@ public class EquipView : BaseView
         _popupInfo.SetActive(false);
 
         // 역경직
-        HitStop.Instance.Do(Canvas.gameObject,_hitStopDuration);
+        HitStop.Instance.Do(Panel.gameObject,_hitStopDuration);
     }
 
     private void SetCurEquip(Equipment equipment)

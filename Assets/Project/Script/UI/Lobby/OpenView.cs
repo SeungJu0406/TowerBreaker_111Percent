@@ -89,7 +89,7 @@ public class OpenView : BaseView
         RemoveChestInSlot();
 
         // 역경직
-        HitStop.Instance.Do(Canvas.gameObject, _hitStopDuration);
+        HitStop.Instance.Do(Panel.gameObject, _hitStopDuration);
     }
 
     private void CreateChestImage()

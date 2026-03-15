@@ -110,7 +110,8 @@ public class BattleSystem : MonoBehaviour, IBattle
 
         DamageText textPrefab = Resources.Load<DamageText>("DamageUI");
 
-        DamageText text = ObjectPool.Get(textPrefab);
+        Vector3 firstSpawnPoint = new Vector3(10000, 10000, 0);
+        DamageText text = ObjectPool.Get(textPrefab, firstSpawnPoint, textPrefab.transform.rotation);
         text.SetDamageText(HitPoint, damage, isCritical);
     }
 }
