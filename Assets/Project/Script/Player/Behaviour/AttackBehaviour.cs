@@ -13,7 +13,6 @@ namespace NSJ_Player
         // 상자는 Enemy와 별도 레이어 — 인스펙터에서 Chest 레이어 지정
         [SerializeField] private LayerMask _chestLayer;
 
-
         private bool _canAttack = true;
         // 층 전환 중에는 공격 불가 — 플레이어가 화면 밖에 있으므로 입력을 막음
         private bool _isTransitioning = false;
