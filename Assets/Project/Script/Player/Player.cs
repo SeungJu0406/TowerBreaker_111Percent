@@ -49,18 +49,9 @@ namespace NSJ_Player
             AdjustPositionsToScreen();
         }
 
-        private void AdjustPositionsToScreen()
+        private void Start()
         {
-            Camera cam = Camera.main;
-            float depth = Mathf.Abs(cam.transform.position.z);
-
-            float initW  = cam.ViewportToWorldPoint(new Vector3(_initViewportX,      0f, depth)).x;
-            float leftW  = cam.ViewportToWorldPoint(new Vector3(_leftEntryViewportX, 0f, depth)).x;
-            float rightW = cam.ViewportToWorldPoint(new Vector3(_rightExitViewportX, 0f, depth)).x;
-
-            _initialPosition.position = new Vector3(initW,  _initialPosition.position.y,  0f);
-            _leftEntryPos.position    = new Vector3(leftW,  _leftEntryPos.position.y,     0f);
-            _rightEntryPos.position   = new Vector3(rightW, _rightEntryPos.position.y,    0f);
+            transform.position = _initialPosition.position;
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
@@ -168,5 +159,19 @@ namespace NSJ_Player
 
             _isTransitioning = false;
         }
+        private void AdjustPositionsToScreen()
+        {
+            Camera cam = Camera.main;
+            float depth = Mathf.Abs(cam.transform.position.z);
+
+            float initW = cam.ViewportToWorldPoint(new Vector3(_initViewportX, 0f, depth)).x;
+            float leftW = cam.ViewportToWorldPoint(new Vector3(_leftEntryViewportX, 0f, depth)).x;
+            float rightW = cam.ViewportToWorldPoint(new Vector3(_rightExitViewportX, 0f, depth)).x;
+
+            _initialPosition.position = new Vector3(initW, _initialPosition.position.y, 0f);
+            _leftEntryPos.position = new Vector3(leftW, _leftEntryPos.position.y, 0f);
+            _rightEntryPos.position = new Vector3(rightW, _rightEntryPos.position.y, 0f);
+        }
     }
+
 }
