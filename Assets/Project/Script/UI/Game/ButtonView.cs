@@ -1,6 +1,7 @@
 using NSJ_MVVM;
 using NSJ_Player;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ButtonView : BaseView
@@ -31,7 +32,12 @@ public class ButtonView : BaseView
 
     protected override void SubscribeEvents()
     {
-        _dashButton.onClick.AddListener(_dashBehaviour.Dash);
+        EventTrigger dashTrigger = _dashButton.gameObject.AddComponent<EventTrigger>();
+        EventTrigger.Entry dashEntry = new EventTrigger.Entry();
+        dashEntry.eventID = EventTriggerType.PointerDown;
+        dashEntry.callback.AddListener(_ => _dashBehaviour.Dash());
+        dashTrigger.triggers.Add(dashEntry);
+
         _defenceButton.onClick.AddListener(_defenceBehaviour.Defence);
         _attackButton.onClick.AddListener(_attackBehaviour.Attack);
     }
