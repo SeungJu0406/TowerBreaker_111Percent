@@ -13,7 +13,7 @@ namespace NSJ_Player
             get
             {
                 float power = _attackPower;
-                if (UserDataManager.Instance.CurEquipment != null)
+                if (UserDataManager.Instance.CurEquipment != null && UserDataManager.Instance.CurEquipment.Data != null)
                 {
                     power += UserDataManager.Instance.CurEquipment.Data.BasicDamage;
                 }
