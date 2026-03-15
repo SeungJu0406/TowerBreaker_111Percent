@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class OpenView : BaseView
 {
+    [SerializeField] private GetEquipView _getEquip;
     [SerializeField] private GameObject _chestPrefab;
     [SerializeField] private float _chestMoveDuration=0.3f;
     private Button _openButton;
@@ -74,6 +75,7 @@ public class OpenView : BaseView
 
         // 장비 획득
         UserDataManager.Instance.ChestCount--;
+        _getEquip.GetEquipment();
 
         // 상자 없애고 당겨오기
         RemoveChestInSlot();

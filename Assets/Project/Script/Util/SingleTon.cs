@@ -2,8 +2,6 @@ using UnityEngine;
 
 namespace Utility
 {
-    // Claude - RuntimeInitializeOnLoadMethod�� ���׸� Ŭ�������� �������� ����
-    //         �����׸� ���̽��� ���� �ξ� ���� �ʱ�ȭ�� ����ϰ� �и�
     public abstract class SingleTonBase : MonoBehaviour
     {
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -12,7 +10,6 @@ namespace Utility
             s_isQuitting = false;
         }
 
-        // Claude - isQuitting�� ��� �̱����� �����ؾ� �ϹǷ� ���̽����� ����
         protected static bool s_isQuitting = false;
 
         private void OnApplicationQuit() => s_isQuitting = true;
@@ -24,8 +21,6 @@ namespace Utility
     {
         protected static T _instance;
 
-        // Claude - _instance ������ �� ���׸� Ÿ�Կ��� Awake�� ó���ǹǷ�
-        //         null üũ + ���� ���� ��ȿ�� �������� ����
         public static T Instance
         {
             get
@@ -37,8 +32,6 @@ namespace Utility
 
         private void Awake()
         {
-            // Claude - Domain Reload ���� ��� ���� ������ �ı��� ������Ʈ��
-            //         _instance�� �������� �� �����Ƿ� null üũ �ʿ�
             if (_instance != null && _instance.Equals(null))
             {
                 _instance = null;
@@ -66,8 +59,6 @@ namespace Utility
         {
             if (s_isQuitting) return;
 
-            // Claude - ���׸� Ư���� _instance ������ SubsystemRegistration���� �ȵǹǷ�
-            //         �ı��� ������Ʈ ���� ���θ� Equals(null)�� üũ
             if (_instance != null && _instance.Equals(null))
             {
                 _instance = null;

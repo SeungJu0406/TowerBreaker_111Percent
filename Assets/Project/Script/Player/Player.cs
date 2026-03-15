@@ -8,9 +8,20 @@ namespace NSJ_Player
         public Transform InitialPosition => _initialPosition;
         [SerializeField] private Transform _initialPosition;
         [SerializeField] private int _health = 3;
-        [SerializeField] private float _attackPower;
-        public float AttackPower => _attackPower;
 
+        public float AttackPower {
+            get
+            {
+                float power = _attackPower;
+                if (UserDataManager.Instance.CurEquipment != null)
+                {
+                    power += UserDataManager.Instance.CurEquipment.Data.BasicDamage;
+                }
+                return power;
+            }
+        }
+
+        [SerializeField] private float _attackPower;
         [Header("Stage Transition")]
         // 화면 밖 이동 / 왼쪽 등장 각각에 걸리는 시간(초)
         [SerializeField] private float _transitionMoveDuration = 0.5f;
