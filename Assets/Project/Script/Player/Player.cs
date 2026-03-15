@@ -126,6 +126,8 @@ namespace NSJ_Player
         // FloorManager에서 yield return StartCoroutine(_player.MoveOffScreenCoroutine()) 로 호출
         public IEnumerator MoveOffScreenCoroutine()
         {
+            gameObject.layer = LayerMask.NameToLayer("IgnoreCollide");
+
             Vector3 start = transform.position;
             Vector3 target = _rightEntryPos.position;
             float elapsed = 0f;
@@ -161,6 +163,8 @@ namespace NSJ_Player
             _rb.linearVelocity = Vector3.zero;
 
             _isTransitioning = false;
+
+            gameObject.layer = LayerMask.NameToLayer("Player");
         }
         private void AdjustPositionsToScreen()
         {

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: weapon2
   m_EditorClassIdentifier: 
   Name: weapon2
-  Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  Sprite: {fileID: -3561148701943319872, guid: 6d0d8e88f558fdd45822018b80ab2b02, type: 3}
   BasicDamage: 2

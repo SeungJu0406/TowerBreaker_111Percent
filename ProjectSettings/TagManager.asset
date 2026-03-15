@@ -19,7 +19,7 @@ TagManager:
   - NotCollidePlayer
   - Chest
   - Boss
-  - 
+  - IgnoreCollide
   - 
   - 
   - 
