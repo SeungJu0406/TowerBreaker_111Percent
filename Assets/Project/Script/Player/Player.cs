@@ -22,6 +22,12 @@ namespace NSJ_Player
         }
 
         [SerializeField] private float _attackPower;
+
+        [Header("Screen Positions")]
+        [SerializeField] private float _initViewportX       =  0.35f;
+        [SerializeField] private float _leftEntryViewportX  = -0.15f;
+        [SerializeField] private float _rightExitViewportX  =  1.15f;
+
         [Header("Stage Transition")]
         // 화면 밖 이동 / 왼쪽 등장 각각에 걸리는 시간(초)
         [SerializeField] private float _transitionMoveDuration = 0.5f;
@@ -40,6 +46,21 @@ namespace NSJ_Player
         void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
+            AdjustPositionsToScreen();
+        }
+
+        private void AdjustPositionsToScreen()
+        {
+            Camera cam = Camera.main;
+            float depth = Mathf.Abs(cam.transform.position.z);
+
+            float initW  = cam.ViewportToWorldPoint(new Vector3(_initViewportX,      0f, depth)).x;
+            float leftW  = cam.ViewportToWorldPoint(new Vector3(_leftEntryViewportX, 0f, depth)).x;
+            float rightW = cam.ViewportToWorldPoint(new Vector3(_rightExitViewportX, 0f, depth)).x;
+
+            _initialPosition.position = new Vector3(initW,  _initialPosition.position.y,  0f);
+            _leftEntryPos.position    = new Vector3(leftW,  _leftEntryPos.position.y,     0f);
+            _rightEntryPos.position   = new Vector3(rightW, _rightEntryPos.position.y,    0f);
         }
 
         private void OnCollisionEnter2D(Collision2D collision)

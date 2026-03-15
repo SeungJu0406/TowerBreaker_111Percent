@@ -15,6 +15,9 @@ public class Floor : MonoBehaviour
     // 상자가 있는 방은 적 클리어 + 상자 전부 개봉까지 완료해야 다음 층으로 진입
     [SerializeField]private ChestObject _chestObjectPrefab;
     [SerializeField] private Transform _chestPos;
+
+    [Header("Screen Positions")]
+    [SerializeField] private float _enemyStartViewportX = 1.1f;
     private ChestObject _chest;
     
     // FloorManager가 구독 → 이 층의 모든 조건(적 + 상자)이 충족되면 전환 시작
@@ -97,8 +100,10 @@ public class Floor : MonoBehaviour
             newEnemys.SetMoveSpeed(enemyGroup.EnemysSpeed);
 
             enemysGroup.Add(newEnemys);
-            // 위치 설정
-            newEnemys.transform.position = _InitialEnemyPos.position;
+            // 위치 설정 — viewport 기반 X로 오른쪽 화면 끝 기준 스폰
+            float depth  = Mathf.Abs(Camera.main.transform.position.z);
+            float spawnX = Camera.main.ViewportToWorldPoint(new Vector3(_enemyStartViewportX, 0f, depth)).x;
+            newEnemys.transform.position = new Vector3(spawnX, _InitialEnemyPos.position.y, 0f);
             for (int i = 0; i < enemies.Count; i++)
             {
                 // 적 생성 로직
