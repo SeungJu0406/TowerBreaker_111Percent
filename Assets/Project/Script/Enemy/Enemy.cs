@@ -30,6 +30,9 @@ namespace NSJ_Enemy
         // 해골 프리팹
         [SerializeField] private SkullObject _skullPrefab;
 
+        [Header("경직")]
+        [SerializeField] private float _hitStopDuration = 0.05f;
+
         public event UnityAction OnDie;
 
         private bool _isReserveCanHitTrue;
@@ -72,7 +75,7 @@ namespace NSJ_Enemy
 
         private void Die()
         {
-            HitStop.Instance.Do(0.08f);
+            HitStop.Instance.Do(_hitStopDuration);
 
             // 죽는 로직
             _canHit = false;

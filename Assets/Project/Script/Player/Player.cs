@@ -36,6 +36,9 @@ namespace NSJ_Player
         [SerializeField] private float _transitionMoveDuration = 0.5f;
         [SerializeField] private Transform _rightEntryPos;
         [SerializeField] private Transform _leftEntryPos;
+        [Header("경직")]
+        [SerializeField] private float _hitStopDuration = 0.1f;
+
         public bool IsCollide => _isCollide;
         private bool _isCollide = false;
         // 전환 중 왼쪽 Boundary를 통과할 때 피격 판정이 발생하는 버그 방지용
@@ -100,7 +103,7 @@ namespace NSJ_Player
 
             Health--;
 
-            HitStop.Instance.Do(0.1f);
+            HitStop.Instance.Do(_hitStopDuration);
 
             if (Health <= 0)
             {
