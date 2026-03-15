@@ -64,8 +64,8 @@ namespace NSJ_Player
             // 적과 충돌전 까지
             while (_player.IsCollide == false)
             {
-                _player.Rb.MovePosition(_player.Rb.position + Vector2.right * _dashSpeed * Time.deltaTime);
-                yield return null;
+                _player.Rb.MovePosition(_player.Rb.position + Vector2.right * _dashSpeed * Time.fixedDeltaTime);
+                yield return new WaitForFixedUpdate();
             }
             // 대쉬 중지
             _canDash = true;
