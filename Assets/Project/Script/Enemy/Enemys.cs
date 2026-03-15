@@ -16,6 +16,7 @@ namespace NSJ_Enemy
 
     public class Enemys : MonoBehaviour
     {
+        public List<Enemy> Enemies => _enemies;
         [SerializeField] private List<Enemy> _enemies;
 
         [SerializeField] private Direction _direction;
@@ -58,6 +59,7 @@ namespace NSJ_Enemy
 
         private void OnDestroy()
         {
+            // 에러가 생길수도 있을 듯
             if (Manager.Event != null)
             {
                 Manager.Event.OnPlayerHit -= HitPlayerAfter;
@@ -76,8 +78,15 @@ namespace NSJ_Enemy
             // 동적으로 추가되는 적도 사망 이벤트 구독
             enemy.OnDie += OnEnemyDied;
             _enemies.Add(enemy);
+        }
+
+        private void InitEnemy()
+        {
+            // 플로어 시작시 호출되어야함
             ControlEnemyInterval();
             InitEnemys();
+
+            Manager.Event.OnPlayerHit += HitPlayerAfter;
         }
 
         // Floor.StartFloor()에서 호출 → 층 시작 시 이동 허용
