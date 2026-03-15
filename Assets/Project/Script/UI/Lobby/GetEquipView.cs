@@ -18,7 +18,7 @@ public class GetEquipView : BaseView
         newEquipment.Data = equipData;
         newEquipment.ReinforedCount = 0;
 
-        UserDataManager.Instance.UserData.Equipments.Add(newEquipment);
+        UserDataManager.Instance.Equipments.Add(newEquipment);
 
         SetPopUI(equipData);
     }
