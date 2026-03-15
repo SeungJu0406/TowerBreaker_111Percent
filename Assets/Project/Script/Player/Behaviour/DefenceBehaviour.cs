@@ -11,7 +11,6 @@ namespace NSJ_Player
         [Header("Overlap")]
         [SerializeField] private Vector2 _overlapOffset = new Vector2(0.5f, 0.5f);
         [SerializeField] private Vector2 _overlapSize = new Vector2(0.5f, 1f);
-        [SerializeField] private LayerMask _enemyLayer;
 
         [Header("KnockBack")]
         [SerializeField] private float _knockBackForce = 5f;
@@ -51,7 +50,7 @@ namespace NSJ_Player
             // _isTransitioning: 층 전환 연출 중에는 입력 차단
             if (_canDefend == false || _isTransitioning) return;
             Vector2 center = (Vector2)transform.position + _overlapOffset;
-            Collider2D[] hits = Physics2D.OverlapBoxAll(center, _overlapSize, 0f, _enemyLayer);
+            Collider2D[] hits = Physics2D.OverlapBoxAll(center, _overlapSize, 0f, Layer.EnemyGroup);
 
             foreach (Collider2D hit in hits)
             {

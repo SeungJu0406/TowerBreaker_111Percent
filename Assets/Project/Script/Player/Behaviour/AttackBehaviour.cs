@@ -10,7 +10,6 @@ namespace NSJ_Player
         [Header("Overlap")]
         [SerializeField] private Vector2 _overlapOffset = new Vector2(0.5f, 0.5f);
         [SerializeField] private Vector2 _overlapSize = new Vector2(0.5f, 1f);
-        [SerializeField] private LayerMask _enemyLayer;
         // 상자는 Enemy와 별도 레이어 — 인스펙터에서 Chest 레이어 지정
         [SerializeField] private LayerMask _chestLayer;
 
@@ -53,7 +52,7 @@ namespace NSJ_Player
             if (_canAttack == false || _isTransitioning) return;
 
             Vector2 center = (Vector2)transform.position + _overlapOffset;
-            Collider2D[] hits = Physics2D.OverlapBoxAll(center, _overlapSize, 0f, _enemyLayer);
+            Collider2D[] hits = Physics2D.OverlapBoxAll(center, _overlapSize, 0f, Layer.EnemyGroup);
 
             foreach (Collider2D hit in hits)
             {
